@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Resultados  GamerVault</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+
+<body>
+
+  <!-- ===== NAVEGACIÓN ===== -->
+  <header>
+    <nav>
+      <div class="logo">
+        <a href="index.html"> GamerVault</a>
+      </div>
+
+      <ul>
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="resultados.html">Buscar</a></li>
+        <li><a href="perfil.html">Mi Lista</a></li>
+        <li><a href="perfil.html">Alertas</a></li>
+      </ul>
+
+      <div class="nav-auth">
+        <a href="auth.html">Login</a>
+        <a href="auth.html">Registro</a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- ===== CONTENIDO PRINCIPAL ===== -->
+  <main>
+
+    <!-- BUSCADOR (se mantiene visible en esta página) -->
+    <section class="buscador">
+      <form action="resultados.html" method="GET">
+        <label for="busqueda">Buscá tu juego:</label>
+        <input
+          type="search"
+          id="busqueda"
+          name="q"
+          placeholder="Escribí el nombre del juego..."
+          required
+          autocomplete="off"
+        />
+        <button type="submit">Buscar</button>
+      </form>
+    </section>
+
+    <!-- ENCABEZADO DE RESULTADOS -->
+    <section class="resultados">
+
+      <!--
+        El título va a mostrar el término buscado.
+        Con JS lo completás así:
+          const params = new URLSearchParams(window.location.search);
+          document.getElementById('termino-busqueda').textContent = params.get('q');
+      -->
+      <h1>Resultados para: <span id="termino-busqueda"></span></h1>
+
+      <!-- Botón wishlist (visible solo si el usuario está logueado) -->
+      <button type="button" class="btn-wishlist" id="btn-wishlist">
+        ♥ Agregar a wishlist
+      </button>
+
+      <!-- TABLA DE PRECIOS POR TIENDA -->
+      <!--
+        Esta tabla va a ser generada dinámicamente desde la CheapShark API.
+        La primera fila (🥇) es siempre el precio más bajo.
+        Hardcodeada por ahora para definir la estructura.
+      -->
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">Tienda</th>
+            <th scope="col">Precio</th>
+            <th scope="col">Descuento</th>
+            <th scope="col">Acción</th>
+          </tr>
+        </thead>
+        <tbody id="tabla-precios">
+
+          <!-- Fila ganadora (precio más bajo) -->
+          <tr class="precio-ganador">
+            <td>🥇 Xbox / Microsoft Store</td>
+            <td class="precio-actual">$250</td>
+            <td class="descuento">-75%</td>
+            <td><a href="#" target="_blank" rel="noopener">Ir a la tienda</a></td>
+          </tr>
+
+          <tr>
+            <td>Steam</td>
+            <td class="precio-actual">$2.500</td>
+            <td class="descuento">-50%</td>
+            <td><a href="#" target="_blank" rel="noopener">Ir a la tienda</a></td>
+          </tr>
+
+          <tr>
+            <td>Epic Games Store</td>
+            <td class="precio-actual">$3.000</td>
+            <td class="descuento">-40%</td>
+            <td><a href="#" target="_blank" rel="noopener">Ir a la tienda</a></td>
+          </tr>
+
+          <tr>
+            <td>GOG</td>
+            <td class="precio-actual">$3.200</td>
+            <td class="descuento">-38%</td>
+            <td><a href="#" target="_blank" rel="noopener">Ir a la tienda</a></td>
+          </tr>
+
+          <tr>
+            <td>Fanatical</td>
+            <td class="precio-actual">$3.400</td>
+            <td class="descuento">-32%</td>
+            <td><a href="#" target="_blank" rel="noopener">Ir a la tienda</a></td>
+          </tr>
+
+        </tbody>
+      </table>
+
+      <!-- Estado de carga (se muestra mientras llega la respuesta de la API) -->
+      <p id="estado-carga" hidden>Cargando precios...</p>
+
+      <!-- Mensaje si no hay resultados -->
+      <p id="sin-resultados" hidden>No encontramos resultados para tu búsqueda.</p>
+
+      <!-- Link a la ficha completa del juego -->
+      <a href="juego.html?id=1" id="link-detalle">Ver ficha completa del juego →</a>
+
+    </section>
+
+  </main>
+
+  <!-- ===== PIE DE PÁGINA ===== -->
+  <footer>
+    <p>© 2026 GamerVault — Grupo 7.2</p>
+    <p>Datos provistos por <a href="https://www.cheapshark.com" target="_blank" rel="noopener">CheapShark API</a></p>
+  </footer>
+
+  <script src="js/main.js"></script>
+
+</body>
+</html>

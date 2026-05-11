@@ -1,0 +1,301 @@
+/* =============================================
+   GAMERVAULT — styles.css
+   ============================================= */
+
+
+/* ===== TIPOGRAFÍAS =====
+   Pegar esto en el <head> de cada HTML, ANTES de este css:
+   <link rel="preconnect" href="https://fonts.googleapis.com">
+   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Rajdhani:wght@400;600&display=swap" rel="stylesheet">
+*/
+
+
+/* ===== VARIABLES =====
+   Acá definís los colores y fuentes del sitio.
+   Si querés cambiar un color, cambialo acá y se actualiza en toda la web.
+*/
+:root {
+  --verde:       #1A6B3A;   /* Color principal — usalo en logos, botones, bordes */
+  --verde-medio: #2E8B57;   /* Verde más claro — para links y hovers */
+  --dorado:      #FFD700;   /* Acento — para ofertas, precios destacados */
+  --fondo:       #0F0F0F;   /* Color de fondo de toda la página */
+  --superficie:  #1C1C1C;   /* Fondo de cards y elementos encima del fondo */
+  --texto:       #E0E0E0;   /* Color del texto principal */
+  --texto-suave: #888888;   /* Color del texto secundario (fechas, labels) */
+  --borde:       #2A2A2A;   /* Color de los bordes de cards y separadores */
+
+  --fuente-titulo: 'Orbitron', monospace;   /* Fuente de títulos — podés cambiarla */
+  --fuente-cuerpo: 'Rajdhani', sans-serif;  /* Fuente del texto general */
+}
+
+
+/* ===== RESET =====
+   Elimina los márgenes y paddings que los navegadores agregan por defecto.
+   No tocar esto.
+*/
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--fondo);     /* Fondo de la página */
+  color: var(--texto);                /* Color de texto por defecto */
+  font-family: var(--fuente-cuerpo);  /* Fuente por defecto */
+  line-height: 1.6;                   /* Espaciado entre líneas — podés subir a 1.8 si querés más aire */
+}
+
+img {
+  max-width: 100%;  /* Las imágenes nunca se salen de su contenedor */
+  display: block;
+}
+
+ul {
+  list-style: none;  /* Saca los bullets de las listas */
+}
+
+
+/* ===== LINKS =====
+   Color de todos los <a> del sitio.
+   Podés cambiar los colores acá.
+*/
+a {
+  color: var(--verde-medio);
+  text-decoration: none;  /* Saca el subrayado */
+}
+
+a:hover {
+  color: var(--dorado);  /* Color al pasar el mouse */
+}
+
+
+/* ===== BOTONES =====
+   Estilo base de todos los <button>.
+   Cada botón específico (wishlist, buscar, etc.) lo sobreescribís abajo con su clase.
+*/
+button {
+  cursor: pointer;
+  font-family: var(--fuente-cuerpo);
+  font-size: 1rem;
+  background: transparent;
+  border: 1px solid var(--verde);
+  color: var(--verde-medio);
+  padding: 0.5rem 1.2rem;
+  border-radius: 4px;  /* Redondeado de las esquinas — subí el número para más redondez */
+}
+
+button:hover {
+  background-color: var(--verde);
+  color: #fff;
+}
+
+
+/* ===== LAYOUT =====
+   Limita el ancho máximo del contenido y lo centra.
+   Cambiá el max-width si querés que la página sea más ancha o angosta.
+*/
+header, main, footer {
+  max-width: 1100px;  /* Ancho máximo del contenido */
+  margin: 0 auto;     /* Centra horizontalmente */
+  padding: 0 1rem;    /* Margen lateral en pantallas chicas */
+}
+
+
+/* ===== NAVEGACIÓN ===== */
+nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--borde);  /* Línea separadora debajo del nav */
+}
+
+.logo a {
+  font-family: var(--fuente-titulo);
+  font-size: 1.2rem;   /* Tamaño del logo — podés agrandarlo */
+  color: var(--verde);
+}
+
+nav ul {
+  display: flex;
+  gap: 1.5rem;  /* Espacio entre los links del menú */
+}
+
+nav ul a {
+  color: var(--texto-suave);
+  font-size: 0.95rem;
+}
+
+nav ul a:hover {
+  color: var(--dorado);
+}
+
+.nav-auth,
+.nav-usuario {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.9rem;
+}
+
+
+/* ===== TÍTULOS ===== */
+h1 {
+  font-family: var(--fuente-titulo);
+  font-size: 1.8rem;   /* Tamaño del título principal de cada página */
+  color: #fff;
+  margin-bottom: 1rem;
+}
+
+h2 {
+  font-family: var(--fuente-titulo);
+  font-size: 1.2rem;   /* Tamaño de los subtítulos de sección */
+  color: #fff;
+  margin-bottom: 1rem;
+}
+
+h3 {
+  font-size: 1rem;     /* Tamaño del nombre de los juegos en las cards */
+  color: var(--texto);
+  margin-bottom: 0.5rem;
+}
+
+
+/* ===== SECCIONES =====
+   Espacio vertical entre cada bloque de contenido.
+   Subí el padding si querés más separación entre secciones.
+*/
+section {
+  padding: 2rem 0;
+}
+
+
+/* ===== FORMULARIOS (buscador, login, registro) ===== */
+form {
+  display: flex;
+  flex-wrap: wrap;   /* En pantallas chicas los campos se apilan */
+  gap: 0.5rem;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+form label {
+  width: 100%;
+  font-size: 0.9rem;
+  color: var(--texto-suave);
+}
+
+form input {
+  background-color: var(--superficie);
+  border: 1px solid var(--borde);
+  color: var(--texto);
+  padding: 0.6rem 1rem;
+  border-radius: 4px;
+  font-family: var(--fuente-cuerpo);
+  font-size: 1rem;
+}
+
+form input:focus {
+  outline: none;
+  border-color: var(--verde);  /* Borde verde cuando el campo está seleccionado */
+}
+
+form input::placeholder {
+  color: var(--texto-suave);
+}
+
+
+/* ===== CARDS DE JUEGOS =====
+   Estilo base de cada juego en la grilla.
+   Modificá el background o el border para cambiar el aspecto.
+*/
+.juego-card {
+  background-color: var(--superficie);
+  border: 1px solid var(--borde);
+  border-radius: 6px;
+  padding: 1rem;
+}
+
+.juego-card:hover {
+  border-color: var(--verde);  /* Borde verde al pasar el mouse */
+}
+
+/* Grilla de cards — por defecto 2 columnas.
+   Cambiá el número en repeat() para más o menos columnas. */
+.lista-juegos {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+
+/* ===== PRECIOS ===== */
+.precio-actual {
+  color: var(--verde-medio);  /* Precio con descuento en verde */
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.precio-original {
+  color: var(--texto-suave);
+  text-decoration: line-through;  /* Precio original tachado */
+  font-size: 0.9rem;
+}
+
+.descuento {
+  color: var(--dorado);  /* Porcentaje de descuento en dorado */
+  font-weight: 600;
+}
+
+.precio-ganador {
+  background-color: #1a2e1f;  /* Fondo verde oscuro para la fila ganadora en la tabla */
+}
+
+
+/* ===== TABLA DE PRECIOS ===== */
+table {
+  width: 100%;
+  border-collapse: collapse;  /* Elimina el doble borde entre celdas */
+  margin-bottom: 1.5rem;
+}
+
+th, td {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid var(--borde);
+  font-size: 0.95rem;
+}
+
+th {
+  color: var(--texto-suave);
+  font-weight: 600;
+}
+
+
+/* ===== FOOTER ===== */
+footer {
+  border-top: 1px solid var(--borde);
+  padding: 1.5rem 1rem;
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--texto-suave);
+}
+
+
+/* ===== RESPONSIVE =====
+   En pantallas menores a 600px (celulares) la grilla pasa a 1 columna.
+   Agregá más breakpoints acá si necesitás ajustar otros elementos.
+*/
+@media (max-width: 600px) {
+  .lista-juegos {
+    grid-template-columns: 1fr;  /* 1 columna en celular */
+  }
+
+  nav ul {
+    display: none;  /* Ocultás el menú en celular — después podés agregar un menú hamburguesa */
+  }
+
+  h1 {
+    font-size: 1.3rem;  /* Título más chico en celular */
+  }
+}

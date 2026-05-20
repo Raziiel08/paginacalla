@@ -6,6 +6,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Detalle del juego — GamerVault</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Rajdhani:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/styles.css" />
 </head>
 
@@ -160,13 +162,6 @@
           <li>Precio actual vs. mínimo histórico: <strong id="historico-vs-min">+150%</strong></li>
         </ul>
 
-        <!--
-          Acá va el gráfico de evolución de precios.
-          Cuando llegues a esta parte, podés usar Chart.js:
-          <canvas id="grafico-historico"></canvas>
-          y cargarlo desde:
-          <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-        -->
         <div id="grafico-historico-container">
           <p>[Gráfico de evolución de precios — se implementa con Chart.js]</p>
         </div>

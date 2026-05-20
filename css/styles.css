@@ -1,18 +1,5 @@
-/* =============================================
-   GAMERVAULT — styles.css
-   ============================================= */
-
-
-/* ===== TIPOGRAFÍAS =====
-   Pegar esto en el <head> de cada HTML, ANTES de este css:
-   <link rel="preconnect" href="https://fonts.googleapis.com">
-   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Rajdhani:wght@400;600&display=swap" rel="stylesheet">
-*/
-
-
 /* ===== VARIABLES =====
    Acá definís los colores y fuentes del sitio.
-   Si querés cambiar un color, cambialo acá y se actualiza en toda la web.
 */
 :root {
   --verde:       #1A6B3A;   /* Color principal — usalo en logos, botones, bordes */

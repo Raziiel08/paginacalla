@@ -6,8 +6,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>GamerVault Comparador de precios</title>
-
-<link rel="stylesheet" href="css/styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Rajdhani:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css" />
 </head>
 
 <body>
@@ -79,7 +80,6 @@
       <!--
         Esta lista va a ser generada dinámicamente con JS
         cuando conectes la CheapShark API.
-        Por ahora está hardcodeada para ver la estructura.
       -->
       <ul class="lista-juegos" id="lista-ofertas">
 

@@ -150,6 +150,15 @@ if (tablaPrecios) {
                         return;
                     }
 
+                    // Encontrar el precio de venta original (MSRP) más alto entre todas las tiendas del juego.
+                    var maxRetailPrice = 0;
+                    for (var d = 0; d < deals.length; d++) {
+                        var rPrice = parseFloat(deals[d].retailPrice);
+                        if (rPrice > maxRetailPrice) {
+                            maxRetailPrice = rPrice;
+                        }
+                    }
+
                     // Ordenamos de menor a mayor precio
                     deals.sort(function(a, b) {
                         return parseFloat(a.price) - parseFloat(b.price);
@@ -166,12 +175,19 @@ if (tablaPrecios) {
 
                         var nombreTienda   = tiendas[deal.storeID] || 'Otra tienda';
                         var precioActual   = parseFloat(deal.price).toFixed(2);
-                        var precioOriginal = parseFloat(deal.retailPrice).toFixed(2);
+                        
+                        // Si una tienda reporta un precio original menor al máximo precio de lista del juego (MSRP),
+                        // asumimos el precio máximo detectado como el precio de venta original oficial.
+                        var originalVal = parseFloat(deal.retailPrice);
+                        if (originalVal < maxRetailPrice) {
+                            originalVal = maxRetailPrice;
+                        }
+                        var precioOriginal = originalVal.toFixed(2);
 
                         // Calculamos el % de descuento
                         var descuento = 0;
-                        if (precioOriginal > 0 && precioActual < precioOriginal) {
-                            descuento = Math.round((1 - precioActual / precioOriginal) * 100);
+                        if (precioOriginal > 0 && parseFloat(deal.price) < originalVal) {
+                            descuento = Math.round((1 - parseFloat(deal.price) / originalVal) * 100);
                         }
 
                         var linkCompra = 'https://www.cheapshark.com/redirect?dealID=' + deal.dealID;

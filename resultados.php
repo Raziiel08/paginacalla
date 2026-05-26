@@ -8,7 +8,7 @@
   <title>Resultados  GamerVault</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Rajdhani:wght@400;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/styles.css?v=<?php echo time(); ?>" />
+  <link rel="stylesheet" href="css/styles.css" />
 </head>
 
 <body>

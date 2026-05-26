@@ -26,10 +26,9 @@ function showToast(mensaje, tipo = 'success') {
     
     container.appendChild(toast);
     
-    // Animate in
     setTimeout(() => toast.classList.add('show'), 10);
     
-    // Remove after 3 seconds
+    // Se remueve despues de 3 segundos
     setTimeout(() => {
         toast.classList.remove('show');
         setTimeout(() => toast.remove(), 300);
@@ -697,7 +696,7 @@ if (listaWishlist) {
                 listaWishlist.appendChild(li);
             }
 
-            // Fetch thumbs from API
+            //Mostrar las portadas de los juegos en la wishlist.
             var ids = juegos.map(function(j) { return j.game_id; }).join(',');
             if (ids !== '') {
                 fetch('https://www.cheapshark.com/api/1.0/games?ids=' + ids)

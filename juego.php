@@ -162,8 +162,8 @@
           <li>Precio actual vs. mínimo histórico: <strong id="historico-vs-min">+150%</strong></li>
         </ul>
 
-        <div id="grafico-historico-container">
-          <p>[Gráfico de evolución de precios — se implementa con Chart.js]</p>
+        <div id="grafico-historico-container" style="position: relative; height:300px; width:100%; margin-top: 20px;">
+          <canvas id="grafico-historico"></canvas>
         </div>
       </section>
 
@@ -183,6 +183,7 @@
     <p>Datos provistos por <a href="https://www.cheapshark.com" target="_blank" rel="noopener">CheapShark API</a></p>
   </footer>
 
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="js/main.js"></script>
 
 </body>

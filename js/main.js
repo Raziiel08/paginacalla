@@ -10,12 +10,83 @@ function leerURL(parametro) {
 
 
 // ================================================
+// TOAST NOTIFICACIONES
+// ================================================
+function showToast(mensaje, tipo = 'success') {
+    var container = document.getElementById('toast-container');
+    if (!container) {
+        container = document.createElement('div');
+        container.id = 'toast-container';
+        document.body.appendChild(container);
+    }
+    
+    var toast = document.createElement('div');
+    toast.className = 'toast toast-' + tipo;
+    toast.innerHTML = (tipo === 'success' ? '✅ ' : '❌ ') + mensaje;
+    
+    container.appendChild(toast);
+    
+    // Animate in
+    setTimeout(() => toast.classList.add('show'), 10);
+    
+    // Remove after 3 seconds
+    setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 300);
+    }, 3000);
+}
+
+// ================================================
 // BUSCADOR — index.php y resultados.php
 // ================================================
 
 var inputBusqueda = document.getElementById('busqueda');
+var sugerencias = document.getElementById('busqueda-sugerencias');
+var timeoutIdBusqueda;
 
 if (inputBusqueda) {
+    // Autocompletado en tiempo real
+    if (sugerencias) {
+        inputBusqueda.addEventListener('input', function(e) {
+            clearTimeout(timeoutIdBusqueda);
+            var q = e.target.value.trim();
+            if (q.length < 3) {
+                sugerencias.hidden = true;
+                return;
+            }
+            timeoutIdBusqueda = setTimeout(() => {
+                fetch('https://www.cheapshark.com/api/1.0/games?title=' + encodeURIComponent(q) + '&limit=5')
+                    .then(r => r.json())
+                    .then(juegos => {
+                        if (juegos.length === 0) {
+                            sugerencias.hidden = true;
+                            return;
+                        }
+                        sugerencias.innerHTML = '';
+                        juegos.forEach(j => {
+                            var li = document.createElement('li');
+                            li.innerHTML = `
+                                <a href="juego.php?id=${j.gameID}">
+                                    <img src="${j.thumb}" alt="${j.external}" style="width:40px;height:40px;object-fit:cover;border-radius:4px;margin-right:10px;">
+                                    <span>${j.external} - <strong>$${j.cheapest}</strong></span>
+                                </a>
+                            `;
+                            sugerencias.appendChild(li);
+                        });
+                        sugerencias.hidden = false;
+                    })
+                    .catch(() => sugerencias.hidden = true);
+            }, 300);
+        });
+
+        // Cerrar sugerencias al hacer clic afuera
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('#busqueda-form')) {
+                sugerencias.hidden = true;
+            }
+        });
+    }
+
     inputBusqueda.addEventListener('keydown', function(evento) {
         if (evento.key === 'Enter') {
             var termino = inputBusqueda.value;
@@ -319,7 +390,7 @@ if (fichaJuego) {
 
                             var nombreTienda   = tiendas[deal.storeID] || 'Otra tienda';
                             var precioActual   = parseFloat(deal.price).toFixed(2);
-                            var precioOriginal = parseFloat(deal.retailPrice).toFixed(2);
+                            var precioOriginal = parseFloat(deal.retailPrice);
 
                             // Aplicar MSRP máximo si el deal tiene un retailPrice igual o menor al salePrice (Steam bug)
                             if (precioOriginal < maxRetail) {
@@ -386,6 +457,71 @@ if (fichaJuego) {
                     vsMin = Math.round(((parseFloat(deals[0] ? deals[0].price : histMin) - parseFloat(histMin)) / parseFloat(histMin)) * 100);
                 }
                 document.getElementById('historico-vs-min').textContent = vsMin > 0 ? '+' + vsMin + '%' : 'Mínimo Histórico';
+
+                
+                // GRÁFICO CON CHART.JS
+                var ctx = document.getElementById('grafico-historico');
+                if (ctx && window.Chart) {
+                    var precioActualNumber = deals[0] ? parseFloat(deals[0].price) : parseFloat(histMin);
+                    var minNumber = parseFloat(histMin);
+                    var maxNumber = parseFloat(histMax);
+
+                    // Formatear fechas para los labels (podemos aproximarlas o usar etiquetas genéricas)
+                    var fechaMinima = new Date(detalle.cheapestPriceEver.date * 1000).toLocaleDateString('es-AR');
+                    
+                    new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: ['Lanzamiento', 'Mínimo (' + fechaMinima + ')', 'Hoy'],
+                            datasets: [{
+                                label: 'Evolución de Precio (USD)',
+                                data: [maxNumber, minNumber, precioActualNumber],
+                                borderColor: '#10b981', 
+                                backgroundColor: 'rgba(16, 185, 129, 0.2)',
+                                borderWidth: 3,
+                                pointBackgroundColor: '#ffffff',
+                                pointBorderColor: '#10b981',
+                                pointRadius: 5,
+                                pointHoverRadius: 7,
+                                fill: true,
+                                tension: 0.3
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    labels: {
+                                        color: '#e5e7eb'
+                                    }
+                                }
+                            },
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    grid: {
+                                        color: 'rgba(255, 255, 255, 0.1)'
+                                    },
+                                    ticks: {
+                                        color: '#e5e7eb',
+                                        callback: function(value) {
+                                            return '$' + value;
+                                        }
+                                    }
+                                },
+                                x: {
+                                    grid: {
+                                        color: 'rgba(255, 255, 255, 0.1)'
+                                    },
+                                    ticks: {
+                                        color: '#e5e7eb'
+                                    }
+                                }
+                            }
+                        }
+                    });
+                }
             })
             .catch(function(err) {
                 if (mensajeCarga) mensajeCarga.hidden = true;
@@ -499,7 +635,7 @@ if (botonWishlist) {
     botonWishlist.addEventListener('click', function() {
 
         if (!juegoActual) {
-            alert('Primero buscá un juego');
+            showToast('Primero buscá un juego', 'error');
             return;
         }
 
@@ -514,8 +650,9 @@ if (botonWishlist) {
             if (resultado.ok) {
                 botonWishlist.textContent = '♥ Guardado en wishlist';
                 botonWishlist.disabled = true;
+                showToast('Juego guardado en tu wishlist', 'success');
             } else {
-                alert(resultado.mensaje);
+                showToast(resultado.mensaje, 'error');
             }
         })
         .catch(function(error) {
@@ -525,37 +662,6 @@ if (botonWishlist) {
 }
 
 
-// CARGAR WISHLIST EN PERFIL
-var listaWishlist = document.getElementById('lista-wishlist');
-
-if (listaWishlist) {
-    fetch('php/wishlist/obtener_wishlist.php')
-        .then(function(r) { return r.json(); })
-        .then(function(juegos) {
-            if (juegos.length == 0) {
-                document.getElementById('wishlist-vacia').hidden = false;
-                listaWishlist.hidden = true;
-                return;
-            }
-            listaWishlist.innerHTML = '';
-            for (var i = 0; i < juegos.length; i++) {
-                var j = juegos[i];
-                var li = document.createElement('li');
-                li.className = 'juego-card';
-                li.innerHTML =
-                    '<img src="https://www.cheapshark.com/img/games/capsules/' + j.game_id + '.jpg" alt="' + j.game_nombre + '" />' +
-                    '<div class="juego-info">' +
-                        '<h3><a href="juego.php?id=' + j.game_id + '">' + j.game_nombre + '</a></h3>' +
-                        '<p class="fecha-agregado">Agregado el ' + new Date(j.fecha_agregado).toLocaleDateString('es-AR') + '</p>' +
-                    '</div>' +
-                    '<div class="juego-acciones">' +
-                        '<a href="juego.php?id=' + j.game_id + '">Ver precios</a>' +
-                    '</div>';
-                listaWishlist.appendChild(li);
-            }
-        });
-}
-
 // ================================================
 // CARGAR WISHLIST EN PERFIL
 // ================================================
@@ -579,7 +685,7 @@ if (listaWishlist) {
                 var li = document.createElement('li');
                 li.className = 'juego-card';
                 li.innerHTML =
-                    '<img src="https://www.cheapshark.com/img/games/capsules/' + j.game_id + '.jpg" alt="' + j.game_nombre + '" />' +
+                    '<img id="wishlist-img-' + j.game_id + '" src="assets/img/placeholder.jpg" alt="' + j.game_nombre + '" />' +
                     '<div class="juego-info">' +
                         '<h3><a href="juego.php?id=' + j.game_id + '">' + j.game_nombre + '</a></h3>' +
                         '<p class="fecha-agregado">Agregado el ' + new Date(j.fecha_agregado).toLocaleDateString('es-AR') + '</p>' +
@@ -589,6 +695,25 @@ if (listaWishlist) {
                         '<button type="button" class="btn-quitar-wishlist" data-id="' + j.game_id + '">Quitar de wishlist</button>' +
                     '</div>';
                 listaWishlist.appendChild(li);
+            }
+
+            // Fetch thumbs from API
+            var ids = juegos.map(function(j) { return j.game_id; }).join(',');
+            if (ids !== '') {
+                fetch('https://www.cheapshark.com/api/1.0/games?ids=' + ids)
+                    .then(function(r) { return r.json(); })
+                    .then(function(detalles) {
+                        for (var i = 0; i < juegos.length; i++) {
+                            var gid = juegos[i].game_id;
+                            if (detalles[gid] && detalles[gid].info && detalles[gid].info.thumb) {
+                                var imgElement = document.getElementById('wishlist-img-' + gid);
+                                if (imgElement) {
+                                    imgElement.src = detalles[gid].info.thumb;
+                                }
+                            }
+                        }
+                    })
+                    .catch(function(e) { console.error('Error fetching thumbs:', e); });
             }
 
             // Botones de quitar wishlist
@@ -604,9 +729,10 @@ if (listaWishlist) {
                     .then(function(r) { return r.json(); })
                     .then(function(resultado) {
                         if (resultado.ok) {
-                            location.reload();
+                            showToast('Juego quitado de la wishlist', 'success');
+                            setTimeout(() => location.reload(), 1500);
                         } else {
-                            alert(resultado.mensaje);
+                            showToast(resultado.mensaje, 'error');
                         }
                     });
                 });

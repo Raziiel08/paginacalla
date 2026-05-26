@@ -8,7 +8,7 @@
   <title>Resultados  GamerVault</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Rajdhani:wght@400;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="css/styles.css?v=<?php echo time(); ?>" />
 </head>
 
 <body>
@@ -44,7 +44,7 @@
 
     <!-- BUSCADOR (se mantiene visible en esta página) -->
     <section class="buscador">
-      <form id="busqueda-form" action="resultados.php" method="GET">
+      <form id="busqueda-form" action="resultados.php" method="GET" style="position: relative;">
         <label for="busqueda">Buscá tu juego:</label>
         <input
           type="search"
@@ -55,6 +55,7 @@
           autocomplete="off"
         />
         <button type="submit">Buscar</button>
+        <ul id="busqueda-sugerencias" class="sugerencias-lista" hidden></ul>
       </form>
     </section>
 
@@ -112,7 +113,7 @@
     <p>Datos provistos por <a href="https://www.cheapshark.com" target="_blank" rel="noopener">CheapShark API</a></p>
   </footer>
 
-  <script src="js/main.js"></script>
+  <script src="js/main.js?v=<?php echo time(); ?>"></script>
 
 </body>
 </html>

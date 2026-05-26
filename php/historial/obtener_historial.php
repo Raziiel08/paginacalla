@@ -4,7 +4,7 @@ if (!isset($_SESSION['usuario_id'])) {
     echo json_encode([]);
     exit();
 }
-require_once 'conexion.php';
+require_once '../conexion.php';
 
 if (isset($_POST['accion']) && $_POST['accion'] == 'limpiar') {
     $consulta = $conexion->prepare(

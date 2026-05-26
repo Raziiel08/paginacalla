@@ -4,7 +4,7 @@ if (!isset($_SESSION['usuario_id'])) {
     echo json_encode(['ok' => false]);
     exit();
 }
-require_once 'conexion.php';
+require_once '../conexion.php';
 
 $game_id = trim($_POST['game_id']);
 

@@ -4,6 +4,28 @@ if (!isset($_SESSION['usuario_id'])) {
     header('Location: auth.php');
     exit();
 }
+
+// Conectar a BD para obtener la foto del usuario
+require_once 'php/conexion.php';
+
+$usuario_id = $_SESSION['usuario_id'];
+$foto_perfil = 'default.jpg';
+
+$sql = "SELECT foto FROM usuarios WHERE id = ?";
+$stmt = $conexion->prepare($sql);
+$stmt->bind_param('i', $usuario_id);
+$stmt->execute();
+$result = $stmt->get_result();
+
+if ($result->num_rows > 0) {
+    $row = $result->fetch_assoc();
+    if (!empty($row['foto']) && $row['foto'] !== 'default.jpg') {
+        $foto_perfil = $row['foto'];
+    }
+}
+
+$stmt->close();
+$conexion->close();
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -63,12 +85,33 @@ if (!isset($_SESSION['usuario_id'])) {
 
     <!-- CABECERA DEL PERFIL -->
     <section class="perfil-cabecera">
-      <h1>Mi perfil</h1>
-      <ul class="perfil-meta">
-        <li>Usuario: <strong id="perfil-nombre"><?php echo $_SESSION['usuario_nombre']; ?></strong></li>
-        <li>Email: <strong id="perfil-email"><?php echo $_SESSION['usuario_email']; ?></strong></li>
-        <li>Miembro desde: <strong id="perfil-fecha"><?php echo date('d/m/Y', strtotime($_SESSION['usuario_fecha'])); ?></strong></li>
-      </ul>
+      <div style="display: flex; gap: 2rem; align-items: flex-start;">
+        <div class="perfil-foto-contenedor">
+          <img 
+            id="perfil-foto" 
+            class="perfil-foto" 
+            src="assets/img/perfiles/<?php echo htmlspecialchars($foto_perfil); ?>" 
+            alt="Foto de perfil"
+            onerror="this.src='assets/img/perfiles/default.jpg'"
+          />
+          <div class="perfil-foto-overlay">📷</div>
+          <input 
+            type="file" 
+            id="perfil-foto-input" 
+            class="perfil-foto-input" 
+            accept=".jpg,.jpeg,.png,.gif"
+          />
+        </div>
+        
+        <div class="perfil-datos">
+          <h1>Mi perfil</h1>
+          <ul class="perfil-meta">
+            <li>Usuario: <strong id="perfil-nombre"><?php echo $_SESSION['usuario_nombre']; ?></strong></li>
+            <li>Email: <strong id="perfil-email"><?php echo $_SESSION['usuario_email']; ?></strong></li>
+            <li>Miembro desde: <strong id="perfil-fecha"><?php echo date('d/m/Y', strtotime($_SESSION['usuario_fecha'])); ?></strong></li>
+          </ul>
+        </div>
+      </div>
     </section>
 
     <!-- TABS DE NAVEGACIÓN INTERNA -->
@@ -164,6 +207,78 @@ if (!isset($_SESSION['usuario_id'])) {
   </footer>
 
   <script src="js/main.js"></script>
+  
+  <script>
+    // Foto de perfil circular
+    const fotoPerfil = document.getElementById('perfil-foto');
+    const fotoPerfílInput = document.getElementById('perfil-foto-input');
+    const perfilFotoContenedor = document.querySelector('.perfil-foto-contenedor');
+
+    // Abrir selector de archivos al hacer click en la foto
+    fotoPerfil.addEventListener('click', () => {
+      fotoPerfílInput.click();
+    });
+
+    perfilFotoContenedor.addEventListener('click', () => {
+      fotoPerfílInput.click();
+    });
+
+    // Manejar cambio de archivo
+    fotoPerfílInput.addEventListener('change', async (e) => {
+      const archivo = e.target.files[0];
+      if (!archivo) return;
+
+      // Validación básica en cliente
+      const tiposPermitidos = ['image/jpeg', 'image/png', 'image/gif'];
+      const tamanioMaximo = 2 * 1024 * 1024; // 2MB
+
+      if (!tiposPermitidos.includes(archivo.type)) {
+        alert('Solo se permiten imágenes JPG, PNG o GIF');
+        return;
+      }
+
+      if (archivo.size > tamanioMaximo) {
+        alert('La imagen debe ser menor a 2MB');
+        return;
+      }
+
+      // Preparar FormData
+      const formData = new FormData();
+      formData.append('foto', archivo);
+
+      try {
+        // Mostrar estado de carga
+        fotoPerfil.style.opacity = '0.5';
+        
+        // Enviar a servidor
+        const response = await fetch('php/subir_foto.php', {
+          method: 'POST',
+          body: formData
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          // Actualizar la foto en la página
+          fotoPerfil.src = data.foto;
+          fotoPerfil.style.opacity = '1';
+          
+          // Opcional: mostrar mensaje de éxito
+          console.log('✓ Foto de perfil actualizada');
+        } else {
+          fotoPerfil.style.opacity = '1';
+          alert('Error: ' + (data.error || 'No se pudo guardar la foto'));
+        }
+      } catch (error) {
+        fotoPerfil.style.opacity = '1';
+        console.error('Error al enviar la foto:', error);
+        alert('Error al procesar la imagen');
+      }
+
+      // Limpiar input para permitir subir el mismo archivo de nuevo
+      fotoPerfílInput.value = '';
+    });
+  </script>
 
 </body>
 </html>

@@ -1,6 +1,4 @@
-/* ===== VARIABLES =====
-   Acá definís los colores y fuentes del sitio.
-*/
+
 :root {
   --verde:       #1A6B3A;   /* Color principal — usalo en logos, botones, bordes */
   --verde-medio: #2E8B57;   /* Verde más claro — para links y hovers */
@@ -13,13 +11,18 @@
 
   --fuente-titulo: 'Orbitron', monospace;   /* Fuente de títulos — podés cambiarla */
   --fuente-cuerpo: 'Rajdhani', sans-serif;  /* Fuente del texto general */
+
+  /* Espaciado y tamaños */
+  --max-width: 1100px;
+  --gap: 1rem;
+  --radius: 10px;
+
+  /* Animaciones y sombras */
+  --transition: 240ms cubic-bezier(.2,.9,.3,1);
+  --shadow-soft: 0 8px 20px rgba(0,0,0,0.45);
+  --shadow-strong: 0 20px 40px rgba(0,0,0,0.6);
 }
 
-
-/* ===== RESET =====
-   Elimina los márgenes y paddings que los navegadores agregan por defecto.
-   No tocar esto.
-*/
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
@@ -31,6 +34,13 @@ body {
   color: var(--texto);                /* Color de texto por defecto */
   font-family: var(--fuente-cuerpo);  /* Fuente por defecto */
   line-height: 1.6;                   /* Espaciado entre líneas — podés subir a 1.8 si querés más aire */
+}
+
+/* Contenedor global: reutilizable */
+.container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 1rem;
 }
 
 img {
@@ -77,13 +87,23 @@ button:hover {
   color: #fff;
 }
 
+/* Primary button variant */
+.btn-primary {
+  background: var(--verde);
+  color: #fff;
+  border-color: var(--verde);
+  box-shadow: var(--shadow-soft);
+}
+
+.btn-primary:hover { transform: translateY(-3px); box-shadow: var(--shadow-strong); }
+
 
 /* ===== LAYOUT =====
    Limita el ancho máximo del contenido y lo centra.
    Cambiá el max-width si querés que la página sea más ancha o angosta.
 */
 header, main, footer {
-  max-width: 1100px;  /* Ancho máximo del contenido */
+  max-width: var(--max-width);  /* Ancho máximo del contenido */
   margin: 0 auto;     /* Centra horizontalmente */
   padding: 0 1rem;    /* Margen lateral en pantallas chicas */
 }
@@ -96,6 +116,7 @@ nav {
   justify-content: space-between;
   padding: 1rem 0;
   border-bottom: 1px solid var(--borde);  /* Línea separadora debajo del nav */
+  gap: var(--gap);
 }
 
 .logo a {
@@ -123,6 +144,28 @@ nav ul a:hover {
   display: flex;
   gap: 1rem;
   font-size: 0.9rem;
+}
+
+/* Navegación - estilos más dinámicos */
+nav ul {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.nav-auth a,
+.nav-usuario a {
+  color: var(--texto-suave);
+  border: 1px solid transparent;
+  padding: 0.4rem 0.6rem;
+  border-radius: 6px;
+  transition: background-color var(--transition), color var(--transition), transform var(--transition);
+}
+
+.nav-auth a:hover, .nav-usuario a:hover{
+  background: rgba(26,107,58,0.12);
+  color: var(--verde);
+  transform: translateY(-2px);
 }
 
 
@@ -161,36 +204,159 @@ section {
 form {
   display: flex;
   flex-wrap: wrap;   /* En pantallas chicas los campos se apilan */
-  gap: 0.5rem;
-  align-items: center;
-  margin-bottom: 1rem;
+  gap: 1rem;
+  align-items: flex-start;
+  margin-bottom: 1.5rem;
+}
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  width: 100%;
+  min-width: 220px;
 }
 
 form label {
-  width: 100%;
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   color: var(--texto-suave);
 }
 
-form input {
+form input,
+form select,
+form textarea {
+  width: 100%;
   background-color: var(--superficie);
   border: 1px solid var(--borde);
   color: var(--texto);
-  padding: 0.6rem 1rem;
-  border-radius: 4px;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
   font-family: var(--fuente-cuerpo);
   font-size: 1rem;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
 }
 
-form input:focus {
+form input:focus,
+form select:focus,
+form textarea:focus {
   outline: none;
   border-color: var(--verde);  /* Borde verde cuando el campo está seleccionado */
+  box-shadow: 0 0 0 4px rgba(46, 139, 87, 0.16);
+  transform: translateY(-1px);
+}
+
+/* Focus más suave para inputs */
+form input:focus {
+  box-shadow: 0 6px 18px rgba(46,139,87,0.08);
 }
 
 form input::placeholder {
   color: var(--texto-suave);
 }
 
+button,
+input[type="submit"],
+input[type="button"] {
+  transition: background-color 0.25s ease, color 0.25s ease, transform 0.2s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  border-radius: 8px;
+}
+
+button:hover,
+input[type="submit"]:hover,
+input[type="button"]:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.14);
+}
+
+.auth-tabs,
+.perfil-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.tab {
+  background-color: var(--superficie);
+  border: 1px solid var(--borde);
+  color: var(--texto);
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.tab.activo {
+  border-color: var(--verde);
+  background-color: rgba(26, 107, 58, 0.18);
+}
+
+.error-mensaje {
+  color: #ff4d4f;
+  font-size: 0.9rem;
+  margin-top: 0.35rem;
+}
+
+/* ===== ANIMACIONES SUAVES ===== */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+  100% { transform: scale(1); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200px 0; }
+  100% { background-position: 200px 0; }
+}
+
+/* Shimmer skeleton for loading states */
+.skeleton {
+  background: linear-gradient(90deg, #1b1b1b 25%, #2b2b2b 37%, #1b1b1b 63%);
+  background-size: 400% 100%;
+  animation: shimmer 1.6s linear infinite;
+  border-radius: 6px;
+}
+
+/* Small helpers */
+.muted { color: var(--texto-suave); }
+
+/* Ficha juego layout */
+.ficha-juego { display: grid; gap: 1.25rem; grid-template-columns: 1fr; }
+@media (min-width: 900px) { .ficha-juego { grid-template-columns: 360px 1fr; align-items: start; } }
+
+.ficha-cabecera img { width: 100%; max-width: 340px; border-radius: 8px; }
+
+.ficha-acciones { display:flex; gap:0.5rem; margin-top:0.5rem; }
+
+/* Small micro-interactions */
+.tab { transition: background-color var(--transition), transform var(--transition); }
+.tab:hover { transform: translateY(-3px); }
+
+/* Accessibility: reduce motion */
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; }
+}
+
+section,
+.juego-card,
+.ficha-juego,
+.ficha-cabecera,
+.ficha-descripcion,
+.ficha-comparativa,
+.ficha-historico {
+  animation: fadeInUp 0.45s ease both;
+}
 
 /* ===== CARDS DE JUEGOS =====
    Estilo base de cada juego en la grilla.
@@ -201,10 +367,13 @@ form input::placeholder {
   border: 1px solid var(--borde);
   border-radius: 6px;
   padding: 1rem;
+  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
 }
 
 .juego-card:hover {
   border-color: var(--verde);  /* Borde verde al pasar el mouse */
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.18);
 }
 
 /* Grilla de cards — por defecto 2 columnas.
@@ -215,12 +384,49 @@ form input::placeholder {
   gap: 1rem;
 }
 
+/* Layout for larger screens */
+@media (min-width: 900px) {
+  .lista-juegos { grid-template-columns: repeat(3, 1fr); gap: 1.25rem; }
+}
+
+.juego-card {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+}
+
+.juego-card img {
+  width: 120px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+
+.juego-card .juego-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.juego-card .mejor-tienda { color: var(--texto-suave); font-size: 0.9rem; }
+
+.juego-card { transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition); }
+.juego-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-soft); border-color: rgba(46,139,87,0.18); }
+
 
 /* ===== PRECIOS ===== */
 .precio-actual {
   color: var(--verde-medio);  /* Precio con descuento en verde */
   font-size: 1.1rem;
   font-weight: 600;
+}
+
+.precio-destacado {
+  background: linear-gradient(180deg, rgba(26,107,58,0.06), transparent);
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  display: inline-block;
 }
 
 .precio-original {
@@ -258,6 +464,13 @@ th {
   font-weight: 600;
 }
 
+/* Table hover / winner row */
+tbody tr:hover { background: rgba(255,255,255,0.02); }
+tr.precio-ganador { background: linear-gradient(90deg, rgba(26,107,58,0.06), transparent); }
+
+/* Make action links more button-like */
+table a { color: var(--verde); text-decoration: none; font-weight: 600; }
+
 
 /* ===== FOOTER ===== */
 footer {
@@ -266,6 +479,85 @@ footer {
   text-align: center;
   font-size: 0.85rem;
   color: var(--texto-suave);
+}
+
+
+/* ===== FOTO DE PERFIL CIRCULAR ===== */
+.perfil-foto-contenedor {
+  position: relative;
+  width: 140px;
+  height: 140px;
+  margin-bottom: 1.5rem;
+}
+
+.perfil-foto {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 4px solid var(--verde);
+  object-fit: cover;
+  cursor: pointer;
+  transition: transform var(--transition), filter var(--transition);
+}
+
+.perfil-foto:hover {
+  transform: scale(1.03);
+  filter: brightness(0.85);
+}
+
+.perfil-foto-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: rgba(26, 107, 58, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity var(--transition);
+  cursor: pointer;
+  font-size: 2.5rem;
+}
+
+.perfil-foto-contenedor:hover .perfil-foto-overlay {
+  opacity: 1;
+}
+
+.perfil-foto-input {
+  display: none;
+}
+
+.perfil-cabecera {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.perfil-datos {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.perfil-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding-left: 1rem;
+}
+
+.perfil-meta li {
+  color: var(--texto-suave);
+  font-size: 0.95rem;
+}
+
+.perfil-meta strong {
+  color: var(--texto);
+  font-weight: 600;
 }
 
 
@@ -284,5 +576,14 @@ footer {
 
   h1 {
     font-size: 1.3rem;  /* Título más chico en celular */
+  }
+
+  .perfil-foto-contenedor {
+    width: 100px;
+    height: 100px;
+  }
+
+  .perfil-foto-overlay {
+    font-size: 1.8rem;
   }
 }

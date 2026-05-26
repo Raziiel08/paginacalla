@@ -16,7 +16,7 @@
   <header>
     <nav>
       <div class="logo">
-        <a href="index.html">🎮 GamerVault</a>
+        <a href="index.php">🎮 GamerVault</a>
       </div>
 
       <ul>

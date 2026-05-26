@@ -111,7 +111,7 @@ if (tablaPrecios) {
             if (spanTermino) spanTermino.textContent = juegoEncontrado.external;
             juegoActual = juegoEncontrado;
 
-            fetch('php/historial.php', {
+            fetch('php/historial/historial.php', {
                  method: 'POST',
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                 body: 'game_nombre=' + encodeURIComponent(juegoEncontrado.external)
@@ -224,6 +224,177 @@ if (tablaPrecios) {
 }
 
 
+// DETALLE DEL JUEGO — juego.php
+// ================================================
+var fichaJuego = document.getElementById('ficha-juego');
+if (fichaJuego) {
+    var gameId = leerURL('id');
+    var mensajeCarga = document.getElementById('estado-carga');
+    var mensajeError = document.getElementById('error-juego');
+
+    if (!gameId) {
+        if (mensajeError) {
+            mensajeError.textContent = 'No se proporcionó un ID de juego válido.';
+            mensajeError.hidden = false;
+        }
+        fichaJuego.hidden = true;
+    } else {
+        if (mensajeCarga) mensajeCarga.hidden = false;
+        fichaJuego.hidden = true;
+
+        var tiendas = {
+            '1':  'Steam',
+            '7':  'GOG',
+            '11': 'Humble Store',
+            '14': 'Green Man Gaming',
+            '21': 'GamersGate',
+            '25': 'Epic Games Store'
+        };
+        var tiendasPermitidas = ['1', '7', '11', '14', '21', '25'];
+
+        fetch('https://www.cheapshark.com/api/1.0/games?id=' + gameId)
+            .then(function(r) { return r.json(); })
+            .then(function(detalle) {
+                if (mensajeCarga) mensajeCarga.hidden = true;
+
+                if (!detalle || !detalle.info) {
+                    if (mensajeError) mensajeError.hidden = false;
+                    return;
+                }
+
+                // Guardar como juegoActual para que los botones de Wishlist y Alertas tengan acceso
+                juegoActual = {
+                    gameID: gameId,
+                    external: detalle.info.title
+                };
+
+                fichaJuego.hidden = false;
+
+                // 1. Datos básicos
+                document.getElementById('breadcrumb-nombre').textContent = detalle.info.title;
+                document.getElementById('juego-nombre').textContent = detalle.info.title;
+                
+                var portada = document.getElementById('juego-portada');
+                if (portada) {
+                    portada.src = detalle.info.thumb || 'assets/img/placeholder.jpg';
+                    portada.alt = 'Portada de ' + detalle.info.title;
+                }
+
+                // Datos adicionales estéticos
+                document.getElementById('juego-desarrollador').textContent = 'Multiplataforma';
+                document.getElementById('juego-generos').textContent = 'Videojuego';
+                document.getElementById('juego-fecha').textContent = 'N/D';
+                document.getElementById('juego-descripcion').textContent = 
+                    'Seguí el precio de ' + detalle.info.title + ' en tiempo real. Te enviaremos una alerta de correo en cuanto detectemos una oferta en Steam, GOG, Epic Games u otras tiendas asociadas que coincida con tu precio objetivo.';
+
+                // 2. Procesar ofertas
+                var deals = detalle.deals || [];
+                deals = deals.filter(function(deal) {
+                    return tiendasPermitidas.includes(deal.storeID);
+                });
+
+                var tablaPreciosDetalle = document.getElementById('tabla-precios-detalle');
+                if (tablaPreciosDetalle) {
+                    tablaPreciosDetalle.innerHTML = '';
+                    
+                    if (deals.length == 0) {
+                        tablaPreciosDetalle.innerHTML = '<tr><td colspan="4" style="text-align: center;">No hay ofertas disponibles en este momento.</td></tr>';
+                    } else {
+                        // Ordenar por precio
+                        deals.sort(function(a, b) {
+                            return parseFloat(a.price) - parseFloat(b.price);
+                        });
+
+                        // Calcular MSRP (Original) máximo para corregir el bug de descuentos
+                        var maxRetail = 0;
+                        deals.forEach(function(d) {
+                            var rPrice = parseFloat(d.retailPrice);
+                            if (rPrice > maxRetail) maxRetail = rPrice;
+                        });
+
+                        // Renderizar filas
+                        deals.forEach(function(deal, index) {
+                            var fila = document.createElement('tr');
+                            if (index == 0) fila.className = 'precio-ganador';
+
+                            var nombreTienda   = tiendas[deal.storeID] || 'Otra tienda';
+                            var precioActual   = parseFloat(deal.price).toFixed(2);
+                            var precioOriginal = parseFloat(deal.retailPrice).toFixed(2);
+
+                            // Aplicar MSRP máximo si el deal tiene un retailPrice igual o menor al salePrice (Steam bug)
+                            if (precioOriginal < maxRetail) {
+                                precioOriginal = maxRetail;
+                            }
+
+                            var descuento = 0;
+                            if (precioOriginal > 0 && parseFloat(deal.price) < precioOriginal) {
+                                descuento = Math.round((1 - parseFloat(deal.price) / precioOriginal) * 100);
+                            }
+
+                            var linkCompra = 'https://www.cheapshark.com/redirect?dealID=' + deal.dealID;
+
+                            fila.innerHTML =
+                                '<td>' + (index == 0 ? '🥇 ' : '') + nombreTienda + '</td>' +
+                                '<td>' +
+                                    (descuento > 0
+                                        ? '<span class="precio-original">$' + precioOriginal.toFixed(2) + '</span> '
+                                        : ''
+                                    ) +
+                                    '<span class="precio-actual">$' + precioActual + '</span>' +
+                                '</td>' +
+                                '<td class="descuento">' +
+                                    (descuento > 0 ? '-' + descuento + '%' : 'Precio normal') +
+                                '</td>' +
+                                '<td><a href="' + linkCompra + '" target="_blank" rel="noopener">Ir a la tienda</a></td>';
+
+                            tablaPreciosDetalle.appendChild(fila);
+                        });
+
+                        // Rellenar mejor precio en el banner de arriba
+                        var mejorDeal = deals[0];
+                        var precioMin = parseFloat(mejorDeal.price).toFixed(2);
+                        var precioOriginalMin = parseFloat(mejorDeal.retailPrice);
+                        if (precioOriginalMin < maxRetail) precioOriginalMin = maxRetail;
+                        
+                        var descMax = 0;
+                        if (precioOriginalMin > 0 && parseFloat(mejorDeal.price) < precioOriginalMin) {
+                            descMax = Math.round((1 - parseFloat(mejorDeal.price) / precioOriginalMin) * 100);
+                        }
+
+                        document.getElementById('juego-precio-min').textContent = '$' + precioMin;
+                        var descSpan = document.getElementById('juego-descuento-max');
+                        if (descSpan) {
+                            descSpan.textContent = descMax > 0 ? '-' + descMax + '%' : 'Precio Normal';
+                        }
+                        document.getElementById('juego-mejor-tienda').textContent = tiendas[mejorDeal.storeID] || 'Tienda';
+                        
+                        var linkCompraBanner = document.getElementById('juego-link-compra');
+                        if (linkCompraBanner) {
+                            linkCompraBanner.href = 'https://www.cheapshark.com/redirect?dealID=' + mejorDeal.dealID;
+                        }
+                    }
+                }
+
+                // 3. Rellenar histórico
+                var histMin = parseFloat(detalle.cheapestPriceEver.price).toFixed(2);
+                document.getElementById('historico-min').textContent = '$' + histMin;
+                var histMax = maxRetail > 0 ? maxRetail.toFixed(2) : (parseFloat(histMin) * 1.5).toFixed(2);
+                document.getElementById('historico-max').textContent = '$' + histMax;
+                
+                var vsMin = 0;
+                if (parseFloat(histMin) > 0) {
+                    vsMin = Math.round(((parseFloat(deals[0] ? deals[0].price : histMin) - parseFloat(histMin)) / parseFloat(histMin)) * 100);
+                }
+                document.getElementById('historico-vs-min').textContent = vsMin > 0 ? '+' + vsMin + '%' : 'Mínimo Histórico';
+            })
+            .catch(function(err) {
+                if (mensajeCarga) mensajeCarga.hidden = true;
+                if (mensajeError) mensajeError.hidden = false;
+                console.error('Error cargando ficha:', err);
+            });
+    }
+}
+
 // ================================================
 // TABS — auth.html
 // ================================================
@@ -332,7 +503,7 @@ if (botonWishlist) {
             return;
         }
 
-        fetch('php/wishlist.php', {
+        fetch('php/wishlist/wishlist.php', {
             method: 'POST',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             body: 'game_id=' + encodeURIComponent(juegoActual.gameID) +
@@ -358,7 +529,7 @@ if (botonWishlist) {
 var listaWishlist = document.getElementById('lista-wishlist');
 
 if (listaWishlist) {
-    fetch('php/obtener_wishlist.php')
+    fetch('php/wishlist/obtener_wishlist.php')
         .then(function(r) { return r.json(); })
         .then(function(juegos) {
             if (juegos.length == 0) {
@@ -391,7 +562,7 @@ if (listaWishlist) {
 var listaWishlist = document.getElementById('lista-wishlist');
 
 if (listaWishlist) {
-    fetch('php/obtener_wishlist.php')
+    fetch('php/wishlist/obtener_wishlist.php')
         .then(function(r) { return r.json(); })
         .then(function(juegos) {
 
@@ -425,7 +596,7 @@ if (listaWishlist) {
             botonesQuitar.forEach(function(btn) {
                 btn.addEventListener('click', function() {
                     var gameId = this.getAttribute('data-id');
-                    fetch('php/quitar_wishlist.php', {
+                    fetch('php/wishlist/quitar_wishlist.php', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                         body: 'game_id=' + gameId
@@ -450,7 +621,7 @@ if (listaWishlist) {
 var listaHistorial = document.getElementById('lista-historial');
 
 if (listaHistorial) {
-    fetch('php/obtener_historial.php')
+    fetch('php/historial/obtener_historial.php')
         .then(function(r) { return r.json(); })
         .then(function(busquedas) {
 
@@ -479,7 +650,7 @@ var btnLimpiarHistorial = document.getElementById('btn-limpiar-historial');
 
 if (btnLimpiarHistorial) {
     btnLimpiarHistorial.addEventListener('click', function() {
-        fetch('php/obtener_historial.php', {
+        fetch('php/historial/obtener_historial.php', {
             method: 'POST',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             body: 'accion=limpiar'

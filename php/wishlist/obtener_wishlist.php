@@ -4,7 +4,7 @@ if (!isset($_SESSION['usuario_id'])) {
     echo json_encode([]);
     exit();
 }
-require_once 'conexion.php';
+require_once '../conexion.php';
 
 $consulta = $conexion->prepare(
     "SELECT game_id, game_nombre, fecha_agregado FROM wishlist WHERE usuario_id = ? ORDER BY fecha_agregado DESC"

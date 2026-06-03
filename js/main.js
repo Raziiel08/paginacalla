@@ -599,6 +599,16 @@ if (tabWishlist && tabAlertas && tabHistorial) {
     tabWishlist.addEventListener('click', function() { cambiarTab(seccionWishlist, tabWishlist); });
     tabAlertas.addEventListener('click', function() { cambiarTab(seccionAlertas, tabAlertas); });
     tabHistorial.addEventListener('click', function() { cambiarTab(seccionHistorial, tabHistorial); });
+
+    // Activar pestaña según el parámetro de URL ?tab=...
+    var tabParam = leerURL('tab');
+    if (tabParam === 'alertas') {
+        tabAlertas.click();
+    } else if (tabParam === 'historial') {
+        tabHistorial.click();
+    } else if (tabParam === 'wishlist') {
+        tabWishlist.click();
+    }
 }
 
 
@@ -786,3 +796,289 @@ if (btnLimpiarHistorial) {
         });
     });
 }
+
+
+// ================================================
+// VENTANA MODAL PREMIUM DE ALERTAS DE PRECIO
+// ================================================
+function showPriceAlertModal(tituloJuego, precioInicial = '', callbackConfirmar) {
+    // Eliminar modal existente si lo hay
+    var existing = document.getElementById('modal-alerta-precio');
+    if (existing) existing.remove();
+
+    var modalHtml = `
+        <div id="modal-alerta-precio" class="modal-overlay">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Configurar Alerta</h2>
+                    <p id="modal-juego-titulo" style="font-weight: 600; color: var(--verde-medio); margin-top: 5px;">${tituloJuego}</p>
+                </div>
+                <div class="modal-body">
+                    <div class="campo">
+                        <label for="modal-precio-input">Precio objetivo (USD):</label>
+                        <input type="number" id="modal-precio-input" step="0.01" min="0.01" value="${precioInicial}" placeholder="Ej: 14.99" required />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="modal-btn-cancel" id="modal-btn-cancelar">Cancelar</button>
+                    <button type="button" class="modal-btn-confirm" id="modal-btn-guardar">Guardar Alerta</button>
+                </div>
+            </div>
+        </div>
+    `;
+
+    var div = document.createElement('div');
+    div.innerHTML = modalHtml.trim();
+    var modalElement = div.firstChild;
+    document.body.appendChild(modalElement);
+
+    // Activamos la clase después de un delay mínimo para la animación de fade-in
+    setTimeout(function() {
+        modalElement.classList.add('activo');
+    }, 10);
+
+    var input = modalElement.querySelector('#modal-precio-input');
+    input.focus();
+
+    var btnCancelar = modalElement.querySelector('#modal-btn-cancelar');
+    var btnGuardar = modalElement.querySelector('#modal-btn-guardar');
+
+    function cerrarModal() {
+        modalElement.classList.remove('activo');
+        setTimeout(function() {
+            modalElement.remove();
+        }, 300);
+    }
+
+    btnCancelar.addEventListener('click', cerrarModal);
+    modalElement.addEventListener('click', function(e) {
+        if (e.target === modalElement) cerrarModal();
+    });
+
+    btnGuardar.addEventListener('click', function() {
+        var valor = input.value.trim();
+        if (valor === '' || parseFloat(valor) <= 0) {
+            showToast('Ingresá un precio válido mayor a 0', 'error');
+            return;
+        }
+        callbackConfirmar(parseFloat(valor), cerrarModal);
+    });
+
+    // Cerrar con Escape, Enviar con Enter
+    input.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+            btnGuardar.click();
+        } else if (e.key === 'Escape') {
+            cerrarModal();
+        }
+    });
+}
+
+
+// ================================================
+// DETALLE JUEGO — BOTÓN CREAR ALERTA
+// ================================================
+var botonAlerta = document.getElementById('btn-alerta');
+
+if (botonAlerta) {
+    botonAlerta.addEventListener('click', function() {
+        if (!juegoActual) {
+            showToast('Primero buscá un juego', 'error');
+            return;
+        }
+
+        // Validar si el usuario inició sesión buscando el botón de logout
+        var logoutBtn = document.querySelector('a[href*="logout.php"]');
+        if (!logoutBtn) {
+            showToast('Tenés que iniciar sesión para crear alertas', 'error');
+            setTimeout(function() {
+                window.location.href = 'auth.php';
+            }, 1500);
+            return;
+        }
+
+        showPriceAlertModal(juegoActual.external, '', function(precioObjetivo, cerrarModal) {
+            fetch('php/alertas/crear_alerta.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: 'game_id=' + encodeURIComponent(juegoActual.gameID) +
+                      '&game_nombre=' + encodeURIComponent(juegoActual.external) +
+                      '&precio_objetivo=' + encodeURIComponent(precioObjetivo)
+            })
+            .then(function(r) { return r.json(); })
+            .then(function(resultado) {
+                if (resultado.ok) {
+                    showToast(resultado.mensaje, 'success');
+                    cerrarModal();
+                } else {
+                    showToast(resultado.mensaje, 'error');
+                }
+            })
+            .catch(function(err) {
+                console.error('Error wishlist/alertas:', err);
+                showToast('Error al procesar la solicitud', 'error');
+            });
+        });
+    });
+}
+
+
+// ================================================
+// CARGAR ALERTAS EN PERFIL
+// ================================================
+var listaAlertas = document.getElementById('lista-alertas');
+
+if (listaAlertas) {
+    function cargarAlertas() {
+        fetch('php/alertas/obtener_alertas.php')
+            .then(function(r) { return r.json(); })
+            .then(function(alertas) {
+                var alertasVacias = document.getElementById('alertas-vacias');
+
+                if (alertas.length == 0) {
+                    if (alertasVacias) alertasVacias.hidden = false;
+                    listaAlertas.innerHTML = '';
+                    listaAlertas.hidden = true;
+                    return;
+                }
+
+                if (alertasVacias) alertasVacias.hidden = true;
+                listaAlertas.hidden = false;
+                listaAlertas.innerHTML = '<li>Cargando precios en tiempo real...</li>';
+
+                // Obtener todos los IDs de juegos para consultar CheapShark de una sola vez
+                var ids = alertas.map(function(a) { return a.game_id; }).join(',');
+                var tiendasPermitidas = ['1', '7', '11', '14', '21', '25'];
+
+                fetch('https://www.cheapshark.com/api/1.0/games?ids=' + ids)
+                    .then(function(r) { return r.json(); })
+                    .then(function(detalles) {
+                        listaAlertas.innerHTML = '';
+
+                        for (var i = 0; i < alertas.length; i++) {
+                            var alerta = alertas[i];
+                            var gid = alerta.game_id;
+                            
+                            // Obtener precio actual de la API
+                            var precioActualStr = 'N/D';
+                            var precioActualVal = null;
+                            
+                            if (detalles && detalles[gid] && detalles[gid].deals) {
+                                var deals = detalles[gid].deals.filter(function(d) {
+                                    return tiendasPermitidas.includes(d.storeID);
+                                });
+                                
+                                if (deals.length > 0) {
+                                    deals.sort(function(a, b) {
+                                        return parseFloat(a.price) - parseFloat(b.price);
+                                    });
+                                    precioActualVal = parseFloat(deals[0].price);
+                                    precioActualStr = '$' + precioActualVal.toFixed(2);
+                                }
+                            }
+
+                            // Determinar estado de la alerta
+                            var estadoTexto = '⏳ Esperando oferta...';
+                            var estadoClass = 'esperando';
+
+                            if (precioActualVal !== null && precioActualVal <= alerta.precio_objetivo) {
+                                estadoTexto = '🔥 ¡Oferta disponible!';
+                                estadoClass = 'disponible';
+                            }
+
+                            var li = document.createElement('li');
+                            li.className = 'alerta-card';
+                            
+                            // Generamos el markup de la tarjeta de alerta
+                            li.innerHTML = `
+                                <div class="alerta-info">
+                                    <h3><a href="juego.php?id=${alerta.game_id}">${alerta.game_nombre}</a></h3>
+                                    <p>Precio máximo objetivo: <strong class="precio-maximo">$${alerta.precio_objetivo.toFixed(2)}</strong></p>
+                                    <p>Precio actual más bajo: <strong class="${estadoClass === 'disponible' ? 'precio-actual-ok' : ''}">${precioActualStr}</strong></p>
+                                    <span class="alerta-estado ${estadoClass}">${estadoTexto}</span>
+                                </div>
+                                <div class="alerta-acciones">
+                                    <button type="button" class="btn-editar-alerta" data-id="${alerta.game_id}" data-nombre="${alerta.game_nombre}" data-precio="${alerta.precio_objetivo}">
+                                        Editar precio
+                                    </button>
+                                    <button type="button" class="btn-eliminar-alerta" data-id="${alerta.game_id}">
+                                        Eliminar
+                                    </button>
+                                </div>
+                            `;
+                            listaAlertas.appendChild(li);
+                        }
+
+                        // Evento Editar Alerta
+                        var botonesEditar = document.querySelectorAll('.btn-editar-alerta');
+                        botonesEditar.forEach(function(btn) {
+                            btn.addEventListener('click', function() {
+                                var gameId = this.getAttribute('data-id');
+                                var gameNombre = this.getAttribute('data-nombre');
+                                var precioActualObj = this.getAttribute('data-precio');
+
+                                showPriceAlertModal(gameNombre, precioActualObj, function(nuevoPrecio, cerrarModal) {
+                                    fetch('php/alertas/editar_alerta.php', {
+                                        method: 'POST',
+                                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                                        body: 'game_id=' + encodeURIComponent(gameId) +
+                                              '&precio_objetivo=' + encodeURIComponent(nuevoPrecio)
+                                    })
+                                    .then(function(r) { return r.json(); })
+                                    .then(function(resultado) {
+                                        if (resultado.ok) {
+                                            showToast(resultado.mensaje, 'success');
+                                            cerrarModal();
+                                            cargarAlertas(); // Recargar la lista de alertas
+                                        } else {
+                                            showToast(resultado.mensaje, 'error');
+                                        }
+                                    })
+                                    .catch(function(err) {
+                                        console.error('Error al editar alerta:', err);
+                                        showToast('Error al editar la alerta', 'error');
+                                    });
+                                });
+                            });
+                        });
+
+                        // Evento Eliminar Alerta
+                        var botonesEliminar = document.querySelectorAll('.btn-eliminar-alerta');
+                        botonesEliminar.forEach(function(btn) {
+                            btn.addEventListener('click', function() {
+                                var gameId = this.getAttribute('data-id');
+                                if (confirm('¿Estás seguro de que querés eliminar esta alerta de precio?')) {
+                                    fetch('php/alertas/eliminar_alerta.php', {
+                                        method: 'POST',
+                                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                                        body: 'game_id=' + encodeURIComponent(gameId)
+                                    })
+                                    .then(function(r) { return r.json(); })
+                                    .then(function(resultado) {
+                                        if (resultado.ok) {
+                                            showToast(resultado.mensaje, 'success');
+                                            cargarAlertas(); // Recargar la lista de alertas
+                                        } else {
+                                            showToast(resultado.mensaje, 'error');
+                                        }
+                                    })
+                                    .catch(function(err) {
+                                        console.error('Error al eliminar alerta:', err);
+                                        showToast('Error al eliminar la alerta', 'error');
+                                    });
+                                }
+                            });
+                        });
+                    })
+                    .catch(function(err) {
+                        console.error('Error al consultar precios en CheapShark:', err);
+                        listaAlertas.innerHTML = '<li>Error al cargar precios actualizados.</li>';
+                    });
+            })
+            .catch(function(err) {
+                console.error('Error al obtener alertas:', err);
+            });
+    }
+
+    cargarAlertas();
+}

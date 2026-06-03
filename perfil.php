@@ -52,7 +52,7 @@ $conexion->close();
         <li><a href="index.php">Inicio</a></li>
         <li><a href="resultados.php">Buscar</a></li>
         <li><a href="perfil.php">Mi Lista</a></li>
-        <li><a href="perfil.php">Alertas</a></li>
+        <li><a href="perfil.php?tab=alertas">Alertas</a></li>
       </ul>
 
       <div class="nav-usuario">
@@ -151,30 +151,12 @@ $conexion->close();
         Lista de alertas activas desde la tabla `alertas` de la BD.
       -->
       <ul class="lista-alertas" id="lista-alertas">
-
-        <li class="alerta-card">
-          <div class="alerta-info">
-            <h3><a href="juego.html?id=7">Red Dead Redemption 2</a></h3>
-            <p>Precio máximo definido: <strong class="precio-maximo">$1.200</strong></p>
-            <p>Precio actual más bajo: <strong class="precio-actual">$1.800</strong></p>
-            <p class="alerta-estado">⏳ Esperando oferta...</p>
-          </div>
-          <div class="alerta-acciones">
-            <button type="button" class="btn-editar-alerta" data-id="7">
-              Editar precio
-            </button>
-            <button type="button" class="btn-eliminar-alerta" data-id="7">
-              Eliminar alerta
-            </button>
-          </div>
-        </li>
-
       </ul>
 
       <!-- Mensaje si no hay alertas -->
       <p id="alertas-vacias" hidden>
         No tenés alertas activas.
-        <a href="index.html">Buscá un juego para crear una</a>
+        <a href="resultados.php">Buscá un juego para crear una</a>
       </p>
 
     </section>

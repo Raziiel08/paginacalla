@@ -661,3 +661,226 @@ footer {
 .toast-error {
   border-left-color: #ff4d4f;
 }
+
+/* ===== SECCIÓN ALERTAS Y TARJETAS DE ALERTA ===== */
+.lista-alertas {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.alerta-card {
+  background-color: var(--superficie);
+  border: 1px solid var(--borde);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1.5rem;
+  transition: transform var(--transition), border-color var(--transition), box-shadow var(--transition);
+}
+
+.alerta-card:hover {
+  border-color: rgba(26, 107, 58, 0.4);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-soft);
+}
+
+.alerta-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.alerta-info h3 a {
+  font-family: var(--fuente-titulo);
+  color: #fff;
+  font-size: 1.1rem;
+}
+
+.alerta-info h3 a:hover {
+  color: var(--dorado);
+}
+
+.alerta-info p {
+  font-size: 0.95rem;
+  color: var(--texto-suave);
+}
+
+.alerta-info strong {
+  color: var(--texto);
+}
+
+.alerta-info .precio-maximo {
+  color: var(--dorado);
+}
+
+.alerta-info .precio-actual-ok {
+  color: var(--verde-medio);
+}
+
+.alerta-estado {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  padding: 0.25rem 0.6rem;
+  border-radius: 4px;
+  margin-top: 0.2rem;
+  width: fit-content;
+}
+
+.alerta-estado.esperando {
+  background: rgba(255, 215, 0, 0.08);
+  color: var(--dorado);
+  border: 1px solid rgba(255, 215, 0, 0.2);
+}
+
+.alerta-estado.disponible {
+  background: rgba(46, 139, 87, 0.12);
+  color: var(--verde-medio);
+  border: 1px solid rgba(46, 139, 87, 0.3);
+}
+
+.alerta-acciones {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.btn-editar-alerta {
+  background: transparent;
+  border-color: var(--verde-medio);
+  color: var(--verde-medio);
+}
+
+.btn-eliminar-alerta {
+  background: transparent;
+  border-color: #ff4d4f;
+  color: #ff4d4f;
+}
+
+.btn-editar-alerta:hover {
+  background: var(--verde-medio);
+  color: #fff;
+}
+
+.btn-eliminar-alerta:hover {
+  background: #ff4d4f;
+  color: #fff;
+}
+
+@media (max-width: 600px) {
+  .alerta-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  .alerta-acciones {
+    width: 100%;
+    justify-content: flex-end;
+  }
+}
+
+/* ===== VENTANA MODAL PREMIUM ===== */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(10, 10, 10, 0.7);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 10000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.modal-overlay.activo {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.modal-content {
+  background: var(--superficie);
+  border: 1px solid var(--borde);
+  border-radius: var(--radius);
+  padding: 2rem;
+  width: 90%;
+  max-width: 450px;
+  box-shadow: var(--shadow-strong);
+  transform: translateY(20px);
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.modal-overlay.activo .modal-content {
+  transform: translateY(0);
+}
+
+.modal-header {
+  margin-bottom: 1.25rem;
+}
+
+.modal-header h2 {
+  font-family: var(--fuente-titulo);
+  color: #fff;
+  font-size: 1.4rem;
+  margin-bottom: 0.25rem;
+}
+
+.modal-header p {
+  color: var(--texto-suave);
+  font-size: 0.95rem;
+}
+
+.modal-body {
+  margin-bottom: 1.5rem;
+}
+
+.modal-body .campo {
+  margin-bottom: 1rem;
+}
+
+.modal-body label {
+  color: var(--texto-suave);
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.modal-body input {
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+
+.modal-btn-confirm {
+  background: var(--verde);
+  color: #fff;
+  border-color: var(--verde);
+}
+
+.modal-btn-cancel {
+  border-color: var(--borde);
+  color: var(--texto-suave);
+}
+
+.modal-btn-cancel:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--texto);
+}
+

@@ -24,7 +24,7 @@
         <li><a href="index.php">Inicio</a></li>
         <li><a href="resultados.php">Buscar</a></li>
         <li><a href="perfil.php">Mi Lista</a></li>
-        <li><a href="perfil.php">Alertas</a></li>
+        <li><a href="perfil.php?tab=alertas">Alertas</a></li>
       </ul>
 
       <div class="nav-auth">

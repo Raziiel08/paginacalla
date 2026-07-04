@@ -60,83 +60,23 @@
         <button type="submit">Buscar</button>
         <ul id="busqueda-sugerencias" class="sugerencias-lista" hidden></ul>
       </form>
-
-      <!-- Categorías rápidas -->
-      <nav aria-label="Categorías rápidas">
-        <ul>
-          <li><a href="resultados.php?categoria=ofertas">🔥 Ofertas</a></li>
-          <li><a href="resultados.php?categoria=accion">Acción</a></li>
-          <li><a href="resultados.php?categoria=rpg">RPG</a></li>
-          <li><a href="resultados.php?categoria=indie">Indie</a></li>
-          <li><a href="resultados.php?categoria=multijugador">Multijugador</a></li>
-          <li><a href="resultados.php?categoria=estrategia">Estrategia</a></li>
-        </ul>
-      </nav>
     </section>
 
     <!-- OFERTAS DESTACADAS -->
     <section class="ofertas-destacadas">
       <h2>🔥 Ofertas destacadas hoy</h2>
 
-      <!--
-        Esta lista va a ser generada dinámicamente con JS
-        cuando conectes la CheapShark API.
-      -->
       <ul class="lista-juegos" id="lista-ofertas">
-
-        <li class="juego-card">
-          <a href="juego.html?id=1">
-            <img src="assets/img/placeholder.jpg" alt="ARK: Survival Evolved" />
-            <div class="juego-info">
-              <h3>ARK: Survival Evolved</h3>
-              <p class="precio-actual">$250</p>
-              <p class="precio-original">$1.000</p>
-              <span class="descuento">-75%</span>
-              <p class="mejor-tienda">Mejor precio: Xbox Store</p>
-            </div>
-          </a>
-        </li>
-
-        <li class="juego-card">
-          <a href="juego.html?id=2">
-            <img src="assets/img/placeholder.jpg" alt="Elden Ring" />
-            <div class="juego-info">
-              <h3>Elden Ring</h3>
-              <p class="precio-actual">$1.400</p>
-              <p class="precio-original">$3.500</p>
-              <span class="descuento">-60%</span>
-              <p class="mejor-tienda">Mejor precio: Steam</p>
-            </div>
-          </a>
-        </li>
-
-        <li class="juego-card">
-          <a href="juego.html?id=3">
-            <img src="assets/img/placeholder.jpg" alt="No Man's Sky" />
-            <div class="juego-info">
-              <h3>No Man's Sky</h3>
-              <p class="precio-actual">$900</p>
-              <p class="precio-original">$1.800</p>
-              <span class="descuento">-50%</span>
-              <p class="mejor-tienda">Mejor precio: Epic Games</p>
-            </div>
-          </a>
-        </li>
-
-        <li class="juego-card">
-          <a href="juego.html?id=4">
-            <img src="assets/img/placeholder.jpg" alt="Resident Evil 4" />
-            <div class="juego-info">
-              <h3>Resident Evil 4</h3>
-              <p class="precio-actual">$1.800</p>
-              <p class="precio-original">$3.000</p>
-              <span class="descuento">-40%</span>
-              <p class="mejor-tienda">Mejor precio: Steam</p>
-            </div>
-          </a>
-        </li>
-
+        <!-- Skeleton loaders (se reemplazan con datos reales de la API) -->
+        <li class="juego-card skeleton-card"><div class="skeleton-img"></div><div class="juego-info"><div class="skeleton-line skeleton-title"></div><div class="skeleton-line skeleton-price"></div><div class="skeleton-line skeleton-store"></div></div></li>
+        <li class="juego-card skeleton-card"><div class="skeleton-img"></div><div class="juego-info"><div class="skeleton-line skeleton-title"></div><div class="skeleton-line skeleton-price"></div><div class="skeleton-line skeleton-store"></div></div></li>
+        <li class="juego-card skeleton-card"><div class="skeleton-img"></div><div class="juego-info"><div class="skeleton-line skeleton-title"></div><div class="skeleton-line skeleton-price"></div><div class="skeleton-line skeleton-store"></div></div></li>
+        <li class="juego-card skeleton-card"><div class="skeleton-img"></div><div class="juego-info"><div class="skeleton-line skeleton-title"></div><div class="skeleton-line skeleton-price"></div><div class="skeleton-line skeleton-store"></div></div></li>
+        <li class="juego-card skeleton-card"><div class="skeleton-img"></div><div class="juego-info"><div class="skeleton-line skeleton-title"></div><div class="skeleton-line skeleton-price"></div><div class="skeleton-line skeleton-store"></div></div></li>
+        <li class="juego-card skeleton-card"><div class="skeleton-img"></div><div class="juego-info"><div class="skeleton-line skeleton-title"></div><div class="skeleton-line skeleton-price"></div><div class="skeleton-line skeleton-store"></div></div></li>
       </ul>
+
+      <p id="ofertas-error" hidden>No se pudieron cargar las ofertas. Intentá de nuevo más tarde.</p>
 
       <a href="resultados.php?categoria=ofertas">Ver todas las ofertas</a>
     </section>

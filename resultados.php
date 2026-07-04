@@ -62,12 +62,6 @@
     <!-- ENCABEZADO DE RESULTADOS -->
     <section class="resultados">
 
-      <!--
-        El título va a mostrar el término buscado.
-        Con JS lo completás así:
-          const params = new URLSearchParams(window.location.search);
-          document.getElementById('termino-busqueda').textContent = params.get('q');
-      -->
       <h1>Resultados para: <span id="termino-busqueda"></span></h1>
 
       <!-- Botón wishlist (visible solo si el usuario está logueado) -->
@@ -76,11 +70,7 @@
       </button>
 
       <!-- TABLA DE PRECIOS POR TIENDA -->
-      <!--
-        Esta tabla va a ser generada dinámicamente desde la CheapShark API.
-        La primera fila (🥇) es siempre el precio más bajo.
-
-      -->
+    
       <table>
         <thead>
           <tr>

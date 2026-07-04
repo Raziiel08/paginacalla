@@ -35,6 +35,20 @@ function showToast(mensaje, tipo = 'success') {
     }, 3000);
 }
 
+function guardarHistorialBusqueda(nombreJuego) {
+    if (!nombreJuego) return;
+
+    var nombre = String(nombreJuego).trim();
+    if (!nombre) return;
+
+    fetch('php/historial/historial.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: 'game_nombre=' + encodeURIComponent(nombre),
+        keepalive: true
+    }).catch(function() {});
+}
+
 // ================================================
 // BUSCADOR — index.php y resultados.php
 // ================================================
@@ -46,6 +60,13 @@ var timeoutIdBusqueda;
 if (inputBusqueda) {
     // Autocompletado en tiempo real
     if (sugerencias) {
+        sugerencias.addEventListener('click', function(e) {
+            var link = e.target.closest('a[data-game-name]');
+            if (link) {
+                guardarHistorialBusqueda(link.dataset.gameName);
+            }
+        });
+
         inputBusqueda.addEventListener('input', function(e) {
             clearTimeout(timeoutIdBusqueda);
             var q = e.target.value.trim();
@@ -65,7 +86,7 @@ if (inputBusqueda) {
                         juegos.forEach(j => {
                             var li = document.createElement('li');
                             li.innerHTML = `
-                                <a href="juego.php?id=${j.gameID}">
+                                <a href="juego.php?id=${j.gameID}" data-game-name="${j.external}">
                                     <img src="${j.thumb}" alt="${j.external}" style="width:40px;height:40px;object-fit:cover;border-radius:4px;margin-right:10px;">
                                     <span>${j.external} - <strong>$${j.cheapest}</strong></span>
                                 </a>
@@ -108,8 +129,71 @@ if (botonBuscar) {
 
 
 // ================================================
-// RESULTADOS — resultados.php
+// OFERTAS DESTACADAS — index.php
+// Carga dinámica desde CheapShark Deals API
 // ================================================
+
+var listaOfertas = document.getElementById('lista-ofertas');
+
+if (listaOfertas) {
+
+    var tiendasNombres = {
+        '1':  'Steam',
+        '7':  'GOG',
+        '11': 'Humble Store',
+        '14': 'Green Man Gaming',
+        '21': 'GamersGate',
+        '25': 'Epic Games Store'
+    };
+
+    // Traemos las 6 mejores ofertas de las tiendas permitidas, ordenadas por ahorro
+    fetch('https://www.cheapshark.com/api/1.0/deals?storeID=1,7,11,14,21,25&pageSize=6&sortBy=Savings&onSale=1')
+        .then(function(r) { return r.json(); })
+        .then(function(deals) {
+
+            if (!deals || deals.length === 0) {
+                listaOfertas.innerHTML = '';
+                var errorMsg = document.getElementById('ofertas-error');
+                if (errorMsg) errorMsg.hidden = false;
+                return;
+            }
+
+            listaOfertas.innerHTML = '';
+
+            for (var i = 0; i < deals.length; i++) {
+                var deal = deals[i];
+
+                var precioVenta   = parseFloat(deal.salePrice).toFixed(2);
+                var precioNormal  = parseFloat(deal.normalPrice).toFixed(2);
+                var ahorro        = Math.round(parseFloat(deal.savings));
+                var nombreTienda  = tiendasNombres[deal.storeID] || 'Tienda';
+
+                var li = document.createElement('li');
+                li.className = 'juego-card';
+                li.style.animationDelay = (i * 0.08) + 's';
+
+                li.innerHTML =
+                    '<a href="juego.php?id=' + deal.gameID + '">' +
+                        '<img src="' + deal.thumb + '" alt="' + deal.title + '" loading="lazy" />' +
+                        '<div class="juego-info">' +
+                            '<h3>' + deal.title + '</h3>' +
+                            '<p class="precio-actual">$' + precioVenta + '</p>' +
+                            (ahorro > 0 ? '<p class="precio-original">$' + precioNormal + '</p>' : '') +
+                            (ahorro > 0 ? '<span class="descuento">-' + ahorro + '%</span>' : '') +
+                            '<p class="mejor-tienda">Mejor precio: ' + nombreTienda + '</p>' +
+                        '</div>' +
+                    '</a>';
+
+                listaOfertas.appendChild(li);
+            }
+        })
+        .catch(function(err) {
+            console.error('Error cargando ofertas destacadas:', err);
+            listaOfertas.innerHTML = '';
+            var errorMsg = document.getElementById('ofertas-error');
+            if (errorMsg) errorMsg.hidden = false;
+        });
+}
 
 var tablaPrecios = document.getElementById('tabla-precios');
 var juegoActual = null
@@ -181,11 +265,7 @@ if (tablaPrecios) {
             if (spanTermino) spanTermino.textContent = juegoEncontrado.external;
             juegoActual = juegoEncontrado;
 
-            fetch('php/historial/historial.php', {
-                 method: 'POST',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: 'game_nombre=' + encodeURIComponent(juegoEncontrado.external)
-            });
+            guardarHistorialBusqueda(juegoEncontrado.external);
 
             // ------------------------------------------------
             // PASO 3: Pedir los precios ACTUALES
@@ -620,15 +700,37 @@ var formRegistro = document.querySelector('#seccion-registro form');
 
 if (formRegistro) {
     formRegistro.addEventListener('submit', function(evento) {
+        var email             = document.getElementById('registro-email').value.trim();
         var password          = document.getElementById('registro-password').value;
         var passwordConfirmar = document.getElementById('registro-password-confirmar').value;
         var errorContrasena   = document.getElementById('registro-error');
+        var errorEmail        = document.getElementById('registro-email-error');
+        var errorPassword     = document.getElementById('registro-password-error');
+        var esEmailValido     = /^[a-z0-9._%+\-]+@(gmail\.com|hotmail\.com|outlook\.com|live\.com|yahoo\.com|yahoo\.es|icloud\.com|protonmail\.com|mail\.com|aol\.com|msn\.com|outlook\.es)$/i.test(email);
+        var esPasswordValida  = /^(?=.*[A-Z])(?=.*[^A-Za-z0-9]).{8,}$/.test(password);
+
+        errorContrasena.hidden = true;
+        errorEmail.hidden = true;
+        errorPassword.hidden = true;
+
+        if (!esEmailValido) {
+            evento.preventDefault();
+            errorEmail.textContent = 'Usá un correo con un dominio popular como @gmail.com o @hotmail.com.';
+            errorEmail.hidden = false;
+            return;
+        }
+
+        if (!esPasswordValida) {
+            evento.preventDefault();
+            errorPassword.textContent = 'La contraseña debe tener al menos 8 caracteres, una mayúscula y un carácter especial.';
+            errorPassword.hidden = false;
+            return;
+        }
 
         if (password != passwordConfirmar) {
             evento.preventDefault();
+            errorContrasena.textContent = 'Las contraseñas no coinciden.';
             errorContrasena.hidden = false;
-        } else {
-            errorContrasena.hidden = true;
         }
     });
 }
@@ -1081,4 +1183,4 @@ if (listaAlertas) {
     }
 
     cargarAlertas();
-}
+}

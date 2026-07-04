@@ -1,16 +1,16 @@
 
 :root {
-  --verde:       #1A6B3A;   /* Color principal — usalo en logos, botones, bordes */
-  --verde-medio: #2E8B57;   /* Verde más claro — para links y hovers */
-  --dorado:      #FFD700;   /* Acento — para ofertas, precios destacados */
-  --fondo:       #0F0F0F;   /* Color de fondo de toda la página */
-  --superficie:  #1C1C1C;   /* Fondo de cards y elementos encima del fondo */
-  --texto:       #E0E0E0;   /* Color del texto principal */
-  --texto-suave: #888888;   /* Color del texto secundario (fechas, labels) */
-  --borde:       #2A2A2A;   /* Color de los bordes de cards y separadores */
+  --verde:       #1A6B3A;  
+  --verde-medio: #2E8B57;   
+  --dorado:      #FFD700;  
+  --fondo:       #0F0F0F;   
+  --superficie:  #1C1C1C;   
+  --texto:       #E0E0E0;  
+  --texto-suave: #888888;   
+  --borde:       #2A2A2A;   
 
-  --fuente-titulo: 'Orbitron', monospace;   /* Fuente de títulos — podés cambiarla */
-  --fuente-cuerpo: 'Rajdhani', sans-serif;  /* Fuente del texto general */
+  --fuente-titulo: 'Orbitron', monospace;   
+  --fuente-cuerpo: 'Rajdhani', sans-serif;  
 
   /* Espaciado y tamaños */
   --max-width: 1100px;
@@ -30,10 +30,10 @@
 }
 
 body {
-  background-color: var(--fondo);     /* Fondo de la página */
-  color: var(--texto);                /* Color de texto por defecto */
-  font-family: var(--fuente-cuerpo);  /* Fuente por defecto */
-  line-height: 1.6;                   /* Espaciado entre líneas — podés subir a 1.8 si querés más aire */
+  background-color: var(--fondo);     
+  color: var(--texto);                
+  font-family: var(--fuente-cuerpo);  
+  line-height: 1.6;                  
 }
 
 /* Contenedor global: reutilizable */
@@ -44,33 +44,29 @@ body {
 }
 
 img {
-  max-width: 100%;  /* Las imágenes nunca se salen de su contenedor */
+  max-width: 100%; 
   display: block;
 }
 
 ul {
-  list-style: none;  /* Saca los bullets de las listas */
+  list-style: none; 
 }
 
 
 /* ===== LINKS =====
    Color de todos los <a> del sitio.
-   Podés cambiar los colores acá.
 */
 a {
   color: var(--verde-medio);
-  text-decoration: none;  /* Saca el subrayado */
+  text-decoration: none; 
 }
 
 a:hover {
-  color: var(--dorado);  /* Color al pasar el mouse */
+  color: var(--dorado);  
 }
 
 
-/* ===== BOTONES =====
-   Estilo base de todos los <button>.
-   Cada botón específico (wishlist, buscar, etc.) lo sobreescribís abajo con su clase.
-*/
+/* ===== BOTONES =====*/
 button {
   cursor: pointer;
   font-family: var(--fuente-cuerpo);
@@ -79,7 +75,7 @@ button {
   border: 1px solid var(--verde);
   color: var(--verde-medio);
   padding: 0.5rem 1.2rem;
-  border-radius: 4px;  /* Redondeado de las esquinas — subí el número para más redondez */
+  border-radius: 4px; 
 }
 
 button:hover {
@@ -98,14 +94,11 @@ button:hover {
 .btn-primary:hover { transform: translateY(-3px); box-shadow: var(--shadow-strong); }
 
 
-/* ===== LAYOUT =====
-   Limita el ancho máximo del contenido y lo centra.
-   Cambiá el max-width si querés que la página sea más ancha o angosta.
-*/
+/* ===== LAYOUT =====*/
 header, main, footer {
-  max-width: var(--max-width);  /* Ancho máximo del contenido */
-  margin: 0 auto;     /* Centra horizontalmente */
-  padding: 0 1rem;    /* Margen lateral en pantallas chicas */
+  max-width: var(--max-width);  
+  margin: 0 auto;     
+  padding: 0 1rem;   
 }
 
 
@@ -115,20 +108,19 @@ nav {
   align-items: center;
   justify-content: space-between;
   padding: 1rem 0;
-  border-bottom: 1px solid var(--borde);  /* Línea separadora debajo del nav */
+  border-bottom: 1px solid var(--borde); 
   gap: var(--gap);
 }
 
 .logo a {
   font-family: var(--fuente-titulo);
-  font-size: 1.2rem;   /* Tamaño del logo — podés agrandarlo */
+  font-size: 1.2rem; 
   color: var(--verde);
 }
 
 nav ul {
   display: flex;
-  gap: 1.5rem;  /* Espacio entre los links del menú */
-}
+  gap: 1.5rem; 
 
 nav ul a {
   color: var(--texto-suave);
@@ -142,8 +134,15 @@ nav ul a:hover {
 .nav-auth,
 .nav-usuario {
   display: flex;
+  align-items: center;
   gap: 1rem;
   font-size: 0.9rem;
+}
+
+.nav-auth span,
+.nav-usuario span {
+  display: inline-flex;
+  align-items: center;
 }
 
 /* Navegación - estilos más dinámicos */
@@ -879,8 +878,52 @@ footer {
   color: var(--texto-suave);
 }
 
-.modal-btn-cancel:hover {
-  background: rgba(255, 255, 255, 0.05);
-  color: var(--texto);
+
+/* ===== SKELETON LOADERS & MICRO-ANIMACIONES DE OFERTAS ===== */
+.skeleton-card {
+  pointer-events: none;
 }
 
+.skeleton-img {
+  width: 120px;
+  height: 80px;
+  background: linear-gradient(90deg, #1c1c1c 25%, #262626 50%, #1c1c1c 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite linear;
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+
+.skeleton-line {
+  background: linear-gradient(90deg, #1c1c1c 25%, #262626 50%, #1c1c1c 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite linear;
+  border-radius: 4px;
+}
+
+.skeleton-title {
+  width: 140px;
+  height: 16px;
+  margin-bottom: 0.6rem;
+}
+
+.skeleton-price {
+  width: 60px;
+  height: 14px;
+  margin-bottom: 0.5rem;
+}
+
+.skeleton-store {
+  width: 90px;
+  height: 10px;
+}
+
+
+#ofertas-error {
+  grid-column: 1 / -1;
+  text-align: center;
+  color: #ff4d4f;
+  padding: 2rem 0;
+  font-family: var(--fuente-titulo);
+}
+}

@@ -1,3 +1,20 @@
+<?php
+$errorRegistro = $_GET['error'] ?? '';
+$mensajeEmail = '';
+$mensajePassword = '';
+
+switch ($errorRegistro) {
+  case 'email_duplicado':
+    $mensajeEmail = 'Ya existe una cuenta con ese email.';
+    break;
+  case 'correo_invalido':
+    $mensajeEmail = 'Usá un correo con un dominio popular como @gmail.com o @hotmail.com.';
+    break;
+  case 'password_invalida':
+    $mensajePassword = 'La contraseña debe tener al menos 8 caracteres, una mayúscula y un carácter especial.';
+    break;
+}
+?>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -120,9 +137,11 @@
             type="email"
             id="registro-email"
             name="email"
-            placeholder="tucorreo@email.com"
+            placeholder="tucorreo@gmail.com"
             required
             autocomplete="email"
+            pattern="[a-z0-9._%+\-]+@(gmail\.com|hotmail\.com|outlook\.com|live\.com|yahoo\.com|yahoo\.es|icloud\.com|protonmail\.com|mail\.com|aol\.com|msn\.com|outlook\.es)"
+            title="Usá un correo con un dominio popular como @gmail.com o @hotmail.com"
           />
         </div>
 
@@ -156,8 +175,11 @@
         <p class="error-mensaje" id="registro-error" hidden>
           Las contraseñas no coinciden.
         </p>
-        <p class="error-mensaje" id="registro-email-error" hidden>
-          Ya existe una cuenta con ese email.
+        <p class="error-mensaje" id="registro-email-error" <?= empty($mensajeEmail) ? 'hidden' : '' ?>>
+          <?= htmlspecialchars($mensajeEmail) ?>
+        </p>
+        <p class="error-mensaje" id="registro-password-error" <?= empty($mensajePassword) ? 'hidden' : '' ?>>
+          <?= htmlspecialchars($mensajePassword) ?>
         </p>
 
         <button type="submit">Crear cuenta</button>

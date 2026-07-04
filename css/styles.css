@@ -14,7 +14,7 @@
 
   /* Espaciado y tamaños */
   --max-width: 1100px;
-  --gap: 1rem;
+  --gap: 16px;
   --radius: 10px;
 
   /* Animaciones y sombras */
@@ -40,7 +40,7 @@ body {
 .container {
   max-width: var(--max-width);
   margin: 0 auto;
-  padding: 0 1rem;
+  padding: 0 16px;
 }
 
 img {
@@ -70,11 +70,11 @@ a:hover {
 button {
   cursor: pointer;
   font-family: var(--fuente-cuerpo);
-  font-size: 1rem;
+  font-size: 16px;
   background: transparent;
   border: 1px solid var(--verde);
   color: var(--verde-medio);
-  padding: 0.5rem 1.2rem;
+  padding: 8px 19.2px;
   border-radius: 4px; 
 }
 
@@ -98,7 +98,7 @@ button:hover {
 header, main, footer {
   max-width: var(--max-width);  
   margin: 0 auto;     
-  padding: 0 1rem;   
+  padding: 0 16px;   
 }
 
 
@@ -107,24 +107,26 @@ nav {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1rem 0;
+  padding: 16px 0;
   border-bottom: 1px solid var(--borde); 
   gap: var(--gap);
 }
 
 .logo a {
   font-family: var(--fuente-titulo);
-  font-size: 1.2rem; 
+  font-size: 19.2px; 
   color: var(--verde);
 }
 
 nav ul {
   display: flex;
-  gap: 1.5rem; 
+  gap: 24px;
+  align-items: center;
+}
 
 nav ul a {
   color: var(--texto-suave);
-  font-size: 0.95rem;
+  font-size: 15.2px;
 }
 
 nav ul a:hover {
@@ -135,8 +137,8 @@ nav ul a:hover {
 .nav-usuario {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  font-size: 0.9rem;
+  gap: 16px;
+  font-size: 14.4px;
 }
 
 .nav-auth span,
@@ -146,17 +148,11 @@ nav ul a:hover {
 }
 
 /* Navegación - estilos más dinámicos */
-nav ul {
-  display: flex;
-  gap: 1rem;
-  align-items: center;
-}
-
 .nav-auth a,
 .nav-usuario a {
   color: var(--texto-suave);
   border: 1px solid transparent;
-  padding: 0.4rem 0.6rem;
+  padding: 6.4px 9.6px;
   border-radius: 6px;
   transition: background-color var(--transition), color var(--transition), transform var(--transition);
 }
@@ -171,31 +167,30 @@ nav ul {
 /* ===== TÍTULOS ===== */
 h1 {
   font-family: var(--fuente-titulo);
-  font-size: 1.8rem;   /* Tamaño del título principal de cada página */
+  font-size: 29px;   /* Tamaño del título principal de cada página */
   color: #fff;
-  margin-bottom: 1rem;
+  margin-bottom: 16px;
 }
 
 h2 {
   font-family: var(--fuente-titulo);
-  font-size: 1.2rem;   /* Tamaño de los subtítulos de sección */
+  font-size: 19px;   /* Tamaño de los subtítulos de sección */
   color: #fff;
-  margin-bottom: 1rem;
+  margin-bottom: 16px;
 }
 
 h3 {
-  font-size: 1rem;     /* Tamaño del nombre de los juegos en las cards */
+  font-size: 16px;     /* Tamaño del nombre de los juegos en las cards */
   color: var(--texto);
-  margin-bottom: 0.5rem;
+  margin-bottom: 8px;
 }
 
 
 /* ===== SECCIONES =====
    Espacio vertical entre cada bloque de contenido.
-   Subí el padding si querés más separación entre secciones.
 */
 section {
-  padding: 2rem 0;
+  padding: 32px 0;
 }
 
 
@@ -203,21 +198,21 @@ section {
 form {
   display: flex;
   flex-wrap: wrap;   /* En pantallas chicas los campos se apilan */
-  gap: 1rem;
+  gap: 16px;
   align-items: flex-start;
-  margin-bottom: 1.5rem;
+  margin-bottom: 24px;
 }
 
 .campo {
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
+  gap: 6px;
   width: 100%;
   min-width: 220px;
 }
 
 form label {
-  font-size: 0.95rem;
+  font-size: 15px;
   color: var(--texto-suave);
 }
 
@@ -228,10 +223,10 @@ form textarea {
   background-color: var(--superficie);
   border: 1px solid var(--borde);
   color: var(--texto);
-  padding: 0.75rem 1rem;
+  padding: 12px 16px;
   border-radius: 8px;
   font-family: var(--fuente-cuerpo);
-  font-size: 1rem;
+  font-size: 16px;
   transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
 }
 
@@ -271,15 +266,15 @@ input[type="button"]:hover {
 .perfil-tabs {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.75rem;
-  margin-bottom: 1.5rem;
+  gap: 12px;
+  margin-bottom: 24px;
 }
 
 .tab {
   background-color: var(--superficie);
   border: 1px solid var(--borde);
   color: var(--texto);
-  padding: 0.75rem 1rem;
+  padding: 12px 16px;
   border-radius: 8px;
   font-weight: 600;
   cursor: pointer;
@@ -292,8 +287,8 @@ input[type="button"]:hover {
 
 .error-mensaje {
   color: #ff4d4f;
-  font-size: 0.9rem;
-  margin-top: 0.35rem;
+  font-size: 14px;
+  margin-top: 6px;
 }
 
 /* ===== ANIMACIONES SUAVES ===== */
@@ -331,18 +326,16 @@ input[type="button"]:hover {
 .muted { color: var(--texto-suave); }
 
 /* Ficha juego layout */
-.ficha-juego { display: grid; gap: 1.25rem; grid-template-columns: 1fr; }
+.ficha-juego { display: grid; gap: 20px; grid-template-columns: 1fr; }
 @media (min-width: 900px) { .ficha-juego { grid-template-columns: 360px 1fr; align-items: start; } }
 
 .ficha-cabecera img { width: 100%; max-width: 340px; border-radius: 8px; }
 
-.ficha-acciones { display:flex; gap:0.5rem; margin-top:0.5rem; }
+.ficha-acciones { display:flex; gap:8px; margin-top:8px; }
 
-/* Small micro-interactions */
 .tab { transition: background-color var(--transition), transform var(--transition); }
 .tab:hover { transform: translateY(-3px); }
 
-/* Accessibility: reduce motion */
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; animation: none !important; }
 }
@@ -359,13 +352,12 @@ section,
 
 /* ===== CARDS DE JUEGOS =====
    Estilo base de cada juego en la grilla.
-   Modificá el background o el border para cambiar el aspecto.
 */
 .juego-card {
   background-color: var(--superficie);
   border: 1px solid var(--borde);
   border-radius: 6px;
-  padding: 1rem;
+  padding: 16px;
   transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
 }
 
@@ -375,22 +367,21 @@ section,
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.18);
 }
 
-/* Grilla de cards — por defecto 2 columnas.
-   Cambiá el número en repeat() para más o menos columnas. */
+/* Grilla de cards — por defecto 2 columnas.*/
 .lista-juegos {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 1rem;
+  gap: 16px;
 }
 
 /* Layout for larger screens */
 @media (min-width: 900px) {
-  .lista-juegos { grid-template-columns: repeat(3, 1fr); gap: 1.25rem; }
+  .lista-juegos { grid-template-columns: repeat(3, 1fr); gap: 20px; }
 }
 
 .juego-card {
   display: flex;
-  gap: 0.75rem;
+  gap: 12px;
   align-items: flex-start;
 }
 
@@ -405,10 +396,10 @@ section,
 .juego-card .juego-info {
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
+  gap: 4px;
 }
 
-.juego-card .mejor-tienda { color: var(--texto-suave); font-size: 0.9rem; }
+.juego-card .mejor-tienda { color: var(--texto-suave); font-size: 14px; }
 
 .juego-card { transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition); }
 .juego-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-soft); border-color: rgba(46,139,87,0.18); }
@@ -417,13 +408,13 @@ section,
 /* ===== PRECIOS ===== */
 .precio-actual {
   color: var(--verde-medio);  /* Precio con descuento en verde */
-  font-size: 1.1rem;
+  font-size: 18px;
   font-weight: 600;
 }
 
 .precio-destacado {
   background: linear-gradient(180deg, rgba(26,107,58,0.06), transparent);
-  padding: 0.75rem 1rem;
+  padding: 12px 16px;
   border-radius: 8px;
   display: inline-block;
 }
@@ -431,7 +422,7 @@ section,
 .precio-original {
   color: var(--texto-suave);
   text-decoration: line-through;  /* Precio original tachado */
-  font-size: 0.9rem;
+  font-size: 14px;
 }
 
 .descuento {
@@ -448,14 +439,14 @@ section,
 table {
   width: 100%;
   border-collapse: collapse;  /* Elimina el doble borde entre celdas */
-  margin-bottom: 1.5rem;
+  margin-bottom: 24px;
 }
 
 th, td {
-  padding: 0.75rem 1rem;
+  padding: 12px 16px;
   text-align: left;
   border-bottom: 1px solid var(--borde);
-  font-size: 0.95rem;
+  font-size: 15px;
 }
 
 th {
@@ -474,9 +465,9 @@ table a { color: var(--verde); text-decoration: none; font-weight: 600; }
 /* ===== FOOTER ===== */
 footer {
   border-top: 1px solid var(--borde);
-  padding: 1.5rem 1rem;
+  padding: 24px 16px;
   text-align: center;
-  font-size: 0.85rem;
+  font-size: 14px;
   color: var(--texto-suave);
 }
 
@@ -486,7 +477,7 @@ footer {
   position: relative;
   width: 140px;
   height: 140px;
-  margin-bottom: 1.5rem;
+  margin-bottom: 24px;
 }
 
 .perfil-foto {
@@ -518,7 +509,7 @@ footer {
   opacity: 0;
   transition: opacity var(--transition);
   cursor: pointer;
-  font-size: 2.5rem;
+  font-size: 40px;
 }
 
 .perfil-foto-contenedor:hover .perfil-foto-overlay {
@@ -533,25 +524,25 @@ footer {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 1rem;
+  gap: 16px;
 }
 
 .perfil-datos {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 8px;
 }
 
 .perfil-meta {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  padding-left: 1rem;
+  gap: 8px;
+  padding-left: 16px;
 }
 
 .perfil-meta li {
   color: var(--texto-suave);
-  font-size: 0.95rem;
+  font-size: 15px;
 }
 
 .perfil-meta strong {
@@ -562,7 +553,6 @@ footer {
 
 /* ===== RESPONSIVE =====
    En pantallas menores a 600px (celulares) la grilla pasa a 1 columna.
-   Agregá más breakpoints acá si necesitás ajustar otros elementos.
 */
 @media (max-width: 600px) {
   .lista-juegos {
@@ -574,7 +564,7 @@ footer {
   }
 
   h1 {
-    font-size: 1.3rem;  /* Título más chico en celular */
+    font-size: 21px;  /* Título más chico en celular */
   }
 
   .perfil-foto-contenedor {
@@ -583,7 +573,7 @@ footer {
   }
 
   .perfil-foto-overlay {
-    font-size: 1.8rem;
+    font-size: 29px;
   }
 }
 
@@ -596,7 +586,7 @@ footer {
   background-color: var(--superficie);
   border: 1px solid var(--borde);
   border-radius: 8px;
-  margin-top: 0.5rem;
+  margin-top: 8px;
   max-height: 300px;
   overflow-y: auto;
   z-index: 100;
@@ -613,7 +603,7 @@ footer {
 .sugerencias-lista a {
   display: flex;
   align-items: center;
-  padding: 0.75rem 1rem;
+  padding: 12px 16px;
   color: var(--texto);
   transition: background-color var(--transition);
 }
@@ -641,7 +631,7 @@ footer {
 .toast {
   background-color: var(--superficie);
   color: var(--texto);
-  padding: 1rem 1.5rem;
+  padding: 16px 24px;
   border-radius: 8px;
   border-left: 4px solid var(--verde);
   box-shadow: var(--shadow-strong);
@@ -665,19 +655,19 @@ footer {
 .lista-alertas {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-  margin-top: 1rem;
+  gap: 16px;
+  margin-top: 16px;
 }
 
 .alerta-card {
   background-color: var(--superficie);
   border: 1px solid var(--borde);
   border-radius: var(--radius);
-  padding: 1.25rem;
+  padding: 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 1.5rem;
+  gap: 24px;
   transition: transform var(--transition), border-color var(--transition), box-shadow var(--transition);
 }
 
@@ -690,13 +680,13 @@ footer {
 .alerta-info {
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
+  gap: 6px;
 }
 
 .alerta-info h3 a {
   font-family: var(--fuente-titulo);
   color: #fff;
-  font-size: 1.1rem;
+  font-size: 18px;
 }
 
 .alerta-info h3 a:hover {
@@ -704,7 +694,7 @@ footer {
 }
 
 .alerta-info p {
-  font-size: 0.95rem;
+  font-size: 15px;
   color: var(--texto-suave);
 }
 
@@ -723,12 +713,12 @@ footer {
 .alerta-estado {
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
-  font-size: 0.9rem;
+  gap: 6px;
+  font-size: 14px;
   font-weight: 600;
-  padding: 0.25rem 0.6rem;
+  padding: 4px 10px;
   border-radius: 4px;
-  margin-top: 0.2rem;
+  margin-top: 3px;
   width: fit-content;
 }
 
@@ -746,7 +736,7 @@ footer {
 
 .alerta-acciones {
   display: flex;
-  gap: 0.5rem;
+  gap: 8px;
   align-items: center;
 }
 
@@ -776,7 +766,7 @@ footer {
   .alerta-card {
     flex-direction: column;
     align-items: flex-start;
-    gap: 1rem;
+    gap: 16px;
   }
   .alerta-acciones {
     width: 100%;
@@ -812,7 +802,7 @@ footer {
   background: var(--superficie);
   border: 1px solid var(--borde);
   border-radius: var(--radius);
-  padding: 2rem;
+  padding: 32px;
   width: 90%;
   max-width: 450px;
   box-shadow: var(--shadow-strong);
@@ -825,38 +815,38 @@ footer {
 }
 
 .modal-header {
-  margin-bottom: 1.25rem;
+  margin-bottom: 20px;
 }
 
 .modal-header h2 {
   font-family: var(--fuente-titulo);
   color: #fff;
-  font-size: 1.4rem;
-  margin-bottom: 0.25rem;
+  font-size: 22px;
+  margin-bottom: 4px;
 }
 
 .modal-header p {
   color: var(--texto-suave);
-  font-size: 0.95rem;
+  font-size: 15px;
 }
 
 .modal-body {
-  margin-bottom: 1.5rem;
+  margin-bottom: 24px;
 }
 
 .modal-body .campo {
-  margin-bottom: 1rem;
+  margin-bottom: 16px;
 }
 
 .modal-body label {
   color: var(--texto-suave);
-  font-size: 0.9rem;
-  margin-bottom: 0.5rem;
+  font-size: 14px;
+  margin-bottom: 8px;
   display: block;
 }
 
 .modal-body input {
-  font-size: 1.1rem;
+  font-size: 18px;
   font-weight: 600;
   letter-spacing: 0.5px;
 }
@@ -864,7 +854,7 @@ footer {
 .modal-footer {
   display: flex;
   justify-content: flex-end;
-  gap: 0.75rem;
+  gap: 12px;
 }
 
 .modal-btn-confirm {
@@ -904,13 +894,13 @@ footer {
 .skeleton-title {
   width: 140px;
   height: 16px;
-  margin-bottom: 0.6rem;
+  margin-bottom: 10px;
 }
 
 .skeleton-price {
   width: 60px;
   height: 14px;
-  margin-bottom: 0.5rem;
+  margin-bottom: 8px;
 }
 
 .skeleton-store {
@@ -923,7 +913,6 @@ footer {
   grid-column: 1 / -1;
   text-align: center;
   color: #ff4d4f;
-  padding: 2rem 0;
+  padding: 32px 0;
   font-family: var(--fuente-titulo);
-}
 }

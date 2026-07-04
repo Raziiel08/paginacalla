@@ -17,91 +17,27 @@ El objetivo del sitio es ayudar a los jugadores a encontrar el precio más bajo 
    **Sistema de usuarios** — Registro, login, logout y foto de perfil personalizable.
 ---
 ## Tecnologías utilizadas
-|
- Capa 
-|
- Tecnología 
-|
-|
-------
-|
------------
-|
-|
- Frontend 
-|
- HTML5, CSS3 (Vanilla), JavaScript (ES6) 
-|
-|
- Backend 
-|
- PHP 8 
-|
-|
- Base de datos 
-|
- MySQL (MariaDB) 
-|
-|
- API externa 
-|
-[
-CheapShark API
-](
-https://www.cheapshark.com/
-)
-|
-|
- Gráficos 
-|
-[
-Chart.js
-](
-https://www.chartjs.org/
-)
-|
-|
- Tipografías 
-|
- Google Fonts (Orbitron, Rajdhani) 
-|
----
+
+| Capa | Tecnología |
+| :--- | :--- |
+| Frontend | HTML5, CSS3 (Vanilla), JavaScript (ES6) |
+| Backend | PHP 8 |
+| Base de datos | MySQL (MariaDB) |
+| API externa | [CheapShark API](https://www.cheapshark.com/) |
+| Gráficos | [Chart.js](https://www.chartjs.org/) |
+| Tipografías | Google Fonts (Orbitron, Rajdhani) |
 ## Base de datos
 - **Nombre:** `gamervault`
 - **Motor:** MySQL / MariaDB
 - **Archivo exportado:** [`gamervault.sql`](./gamervault.sql)
 ### Tablas principales
-|
- Tabla 
-|
- Descripción 
-|
-|
--------
-|
--------------
-|
-|
-`usuarios`
-|
- Registro de usuarios del sistema 
-|
-|
-`wishlist`
-|
- Juegos guardados por cada usuario 
-|
-|
-`alertas_precio`
-|
- Alertas de precio configuradas 
-|
-|
-`historial_busquedas`
-|
- Historial de búsquedas por usuario 
-|
----
+
+| Tabla | Descripción |
+| :--- | :--- |
+| `usuarios` | Registro de usuarios del sistema |
+| `wishlist` | Juegos guardados por cada usuario |
+| `alertas_precio` | Alertas de precio configuradas |
+| `historial_busquedas` | Historial de búsquedas por usuario |
 ## Instalación local
 ### Requisitos
 - XAMPP (Apache + MySQL + PHP 8)
@@ -151,34 +87,10 @@ gamervault/
 ```
 ---
 ## Integrantes
-|
- Nombre 
-|
- GitHub 
-|
-|
---------
-|
---------
-|
-|
- Agustín Hermida 
-|
-[
-@Raziiel08
-](
-https://github.com/Raziiel08
-)
-|
-|
- Elías González 
-|
-[
-@nahuxx2077
-](
-https://github.com/nahuxx2077
-)
-|
----
+
+| Nombre | GitHub |
+| :--- | :--- |
+| Agustín Hermida | [@Raziiel08](https://github.com/Raziiel08) |
+| Elías González | [@nahuxx2077](https://github.com/nahuxx2077) |
 Curso 7.2 materia PISWD.  
 Datos de precios: [CheapShark API](https://www.cheapshark.com/).

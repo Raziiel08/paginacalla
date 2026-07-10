@@ -116,6 +116,7 @@ switch ($accion) {
         $stmt_accept->close();
         break;
 
+
     case 'rechazar':
     case 'eliminar':
         // Si eliminamos una relación, puede ser por id de la tabla amigos o por id de usuario del amigo

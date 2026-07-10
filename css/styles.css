@@ -502,6 +502,28 @@ section,
   font-size: 14px;
 }
 
+.juego-card .juego-acciones {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-left: auto;
+  align-items: flex-start;
+}
+
+.juego-card .juego-acciones a.btn-ver-precios {
+  color: var(--verde-medio);
+  font-weight: 600;
+  text-decoration: none;
+  padding: 0;
+  background: transparent;
+  border: none;
+}
+
+.juego-card .juego-acciones a.btn-ver-precios:hover {
+  color: var(--verde);
+  text-decoration: underline;
+}
+
 .juego-card {
   transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
 }
@@ -1476,4 +1498,24 @@ footer {
   #modal-lista-wishlist-amigo {
     grid-template-columns: repeat(2, 1fr);
   }
-}
+}
+
+/* ===== ACCIONES DE HISTORIAL & CACHÉ ===== */
+.historial-acciones-flex {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+
+.btn-cache {
+  background-color: transparent !important;
+  border: 1px solid var(--dorado) !important;
+  color: var(--dorado) !important;
+}
+
+.btn-cache:hover {
+  background-color: rgba(255, 215, 0, 0.08) !important;
+  color: #fff !important;
+}
+

@@ -839,7 +839,7 @@ if (listaWishlist) {
                     '<p class="fecha-agregado">Agregado el ' + new Date(j.fecha_agregado).toLocaleDateString('es-AR') + '</p>' +
                     '</div>' +
                     '<div class="juego-acciones">' +
-                    '<a href="juego.php?id=' + j.game_id + '">Ver precios</a>' +
+                    '<a href="juego.php?id=' + j.game_id + '" class="btn-ver-precios">Ver precios</a>' +
                     '<button type="button" class="btn-quitar-wishlist" data-id="' + j.game_id + '">Quitar de wishlist</button>' +
                     '</div>';
                 listaWishlist.appendChild(li);
@@ -1501,8 +1501,8 @@ function verWishlistAmigo(amigoId) {
                     <h3><a href="juego.php?id=${j.game_id}">${j.game_nombre}</a></h3>
                     <p class="fecha-agregado">Agregado el ${new Date(j.fecha_agregado).toLocaleDateString('es-AR')}</p>
                 </div>
-                <div class="juego-acciones" style="margin-left: auto;">
-                    <a href="juego.php?id=${j.game_id}" style="background-color: var(--verde-medio); color: white; padding: 6px 12px; border-radius: 4px; font-weight: 600; text-decoration: none;">Ver Precios</a>
+                <div class="juego-acciones">
+                    <a href="juego.php?id=${j.game_id}" class="btn-ver-precios">Ver Precios</a>
                 </div>
             `;
             modalLista.appendChild(li);
@@ -1542,6 +1542,53 @@ if (btnCerrarWishlistModal && modalWishlistAmigo) {
     modalWishlistAmigo.addEventListener('click', function (e) {
         if (e.target === modalWishlistAmigo) {
             modalWishlistAmigo.classList.remove('activo');
+        }
+    });
+}
+
+// ================================================
+// REGISTRO DE SERVICE WORKER & LIMPIEZA DE CACHÉ
+// ================================================
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function () {
+        navigator.serviceWorker.register('/gamervault/js/sw.js')
+            .then(function (reg) {
+                console.log('✓ Service Worker registrado con éxito en el ámbito:', reg.scope);
+            })
+            .catch(function (err) {
+                console.error('Error al registrar Service Worker:', err);
+            });
+    });
+}
+
+function limpiarCacheApp() {
+    if ('caches' in window) {
+        caches.keys().then(function (nombresClaves) {
+            return Promise.all(
+                nombresClaves.map(function (nombreClave) {
+                    return caches.delete(nombreClave);
+                })
+            );
+        }).then(function () {
+            showToast('Caché de la aplicación limpiado con éxito.', 'success');
+            setTimeout(function () {
+                location.reload();
+            }, 1500);
+        }).catch(function (error) {
+            console.error('Error al borrar caché:', error);
+            showToast('No se pudo limpiar el caché de la aplicación.', 'error');
+        });
+    } else {
+        showToast('Tu navegador no soporta el borrado de caché.', 'error');
+    }
+}
+
+// Event listener para botón de limpiar caché en perfil.php
+var btnLimpiarCache = document.getElementById('btn-limpiar-cache-app');
+if (btnLimpiarCache) {
+    btnLimpiarCache.addEventListener('click', function () {
+        if (confirm('¿Querés limpiar el caché de la aplicación? Esto recargará la página y forzará la descarga de las últimas imágenes y precios de la red.')) {
+            limpiarCacheApp();
         }
     });
 }

@@ -38,7 +38,7 @@ $conexion->close();
   <title>Mi perfil — GamerVault</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Rajdhani:wght@400;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="css/styles.css?v=<?php echo time(); ?>" />
 </head>
 
 <body>
@@ -184,7 +184,10 @@ $conexion->close();
       <ul class="lista-historial" id="lista-historial">
       </ul>
 
-      <button type="button" id="btn-limpiar-historial">Limpiar historial</button>
+      <div class="historial-acciones-flex">
+        <button type="button" id="btn-limpiar-historial">Limpiar historial</button>
+        <button type="button" id="btn-limpiar-cache-app" class="btn-cache">Limpiar caché de la app</button>
+      </div>
 
       <!-- Mensaje si el historial está vacío -->
       <p id="historial-vacio" hidden>
@@ -259,7 +262,7 @@ $conexion->close();
     <p>Datos provistos por <a href="https://www.cheapshark.com" target="_blank" rel="noopener">CheapShark API</a></p>
   </footer>
 
-  <script src="js/main.js"></script>
+  <script src="js/main.js?v=<?php echo time(); ?>"></script>
   
   <script>
     // Foto de perfil circular
@@ -316,7 +319,6 @@ $conexion->close();
           fotoPerfil.src = data.foto;
           fotoPerfil.style.opacity = '1';
           
-          // Opcional: mostrar mensaje de éxito
           console.log('✓ Foto de perfil actualizada');
         } else {
           fotoPerfil.style.opacity = '1';

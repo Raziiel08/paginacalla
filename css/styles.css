@@ -1,16 +1,15 @@
-
 :root {
-  --verde:       #1A6B3A;  
-  --verde-medio: #2E8B57;   
-  --dorado:      #FFD700;  
-  --fondo:       #0F0F0F;   
-  --superficie:  #1C1C1C;   
-  --texto:       #E0E0E0;  
-  --texto-suave: #888888;   
-  --borde:       #2A2A2A;   
+  --verde: #1A6B3A;
+  --verde-medio: #2E8B57;
+  --dorado: #FFD700;
+  --fondo: #0F0F0F;
+  --superficie: #1C1C1C;
+  --texto: #E0E0E0;
+  --texto-suave: #888888;
+  --borde: #2A2A2A;
 
-  --fuente-titulo: 'Orbitron', monospace;   
-  --fuente-cuerpo: 'Rajdhani', sans-serif;  
+  --fuente-titulo: 'Orbitron', monospace;
+  --fuente-cuerpo: 'Rajdhani', sans-serif;
 
   /* Espaciado y tamaños */
   --max-width: 1100px;
@@ -18,22 +17,24 @@
   --radius: 10px;
 
   /* Animaciones y sombras */
-  --transition: 240ms cubic-bezier(.2,.9,.3,1);
-  --shadow-soft: 0 8px 20px rgba(0,0,0,0.45);
-  --shadow-strong: 0 20px 40px rgba(0,0,0,0.6);
+  --transition: 240ms cubic-bezier(.2, .9, .3, 1);
+  --shadow-soft: 0 8px 20px rgba(0, 0, 0, 0.45);
+  --shadow-strong: 0 20px 40px rgba(0, 0, 0, 0.6);
 }
 
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
 body {
-  background-color: var(--fondo);     
-  color: var(--texto);                
-  font-family: var(--fuente-cuerpo);  
-  line-height: 1.6;                  
+  background-color: var(--fondo);
+  color: var(--texto);
+  font-family: var(--fuente-cuerpo);
+  line-height: 1.6;
 }
 
 /* Contenedor global: reutilizable */
@@ -44,12 +45,12 @@ body {
 }
 
 img {
-  max-width: 100%; 
+  max-width: 100%;
   display: block;
 }
 
 ul {
-  list-style: none; 
+  list-style: none;
 }
 
 
@@ -58,11 +59,11 @@ ul {
 */
 a {
   color: var(--verde-medio);
-  text-decoration: none; 
+  text-decoration: none;
 }
 
 a:hover {
-  color: var(--dorado);  
+  color: var(--dorado);
 }
 
 
@@ -75,7 +76,7 @@ button {
   border: 1px solid var(--verde);
   color: var(--verde-medio);
   padding: 8px 19.2px;
-  border-radius: 4px; 
+  border-radius: 4px;
 }
 
 button:hover {
@@ -91,14 +92,19 @@ button:hover {
   box-shadow: var(--shadow-soft);
 }
 
-.btn-primary:hover { transform: translateY(-3px); box-shadow: var(--shadow-strong); }
+.btn-primary:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-strong);
+}
 
 
 /* ===== LAYOUT =====*/
-header, main, footer {
-  max-width: var(--max-width);  
-  margin: 0 auto;     
-  padding: 0 16px;   
+header,
+main,
+footer {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 16px;
 }
 
 
@@ -108,13 +114,13 @@ nav {
   align-items: center;
   justify-content: space-between;
   padding: 16px 0;
-  border-bottom: 1px solid var(--borde); 
+  border-bottom: 1px solid var(--borde);
   gap: var(--gap);
 }
 
 .logo a {
   font-family: var(--fuente-titulo);
-  font-size: 19.2px; 
+  font-size: 19.2px;
   color: var(--verde);
 }
 
@@ -157,8 +163,9 @@ nav ul a:hover {
   transition: background-color var(--transition), color var(--transition), transform var(--transition);
 }
 
-.nav-auth a:hover, .nav-usuario a:hover{
-  background: rgba(26,107,58,0.12);
+.nav-auth a:hover,
+.nav-usuario a:hover {
+  background: rgba(26, 107, 58, 0.12);
   color: var(--verde);
   transform: translateY(-2px);
 }
@@ -167,20 +174,23 @@ nav ul a:hover {
 /* ===== TÍTULOS ===== */
 h1 {
   font-family: var(--fuente-titulo);
-  font-size: 29px;   /* Tamaño del título principal de cada página */
+  font-size: 29px;
+  /* Tamaño del título principal de cada página */
   color: #fff;
   margin-bottom: 16px;
 }
 
 h2 {
   font-family: var(--fuente-titulo);
-  font-size: 19px;   /* Tamaño de los subtítulos de sección */
+  font-size: 19px;
+  /* Tamaño de los subtítulos de sección */
   color: #fff;
   margin-bottom: 16px;
 }
 
 h3 {
-  font-size: 16px;     /* Tamaño del nombre de los juegos en las cards */
+  font-size: 16px;
+  /* Tamaño del nombre de los juegos en las cards */
   color: var(--texto);
   margin-bottom: 8px;
 }
@@ -197,7 +207,8 @@ section {
 /* ===== FORMULARIOS (buscador, login, registro) ===== */
 form {
   display: flex;
-  flex-wrap: wrap;   /* En pantallas chicas los campos se apilan */
+  flex-wrap: wrap;
+  /* En pantallas chicas los campos se apilan */
   gap: 16px;
   align-items: flex-start;
   margin-bottom: 24px;
@@ -234,18 +245,59 @@ form input:focus,
 form select:focus,
 form textarea:focus {
   outline: none;
-  border-color: var(--verde);  /* Borde verde cuando el campo está seleccionado */
+  border-color: var(--verde);
+  /* Borde verde cuando el campo está seleccionado */
   box-shadow: 0 0 0 4px rgba(46, 139, 87, 0.16);
   transform: translateY(-1px);
 }
 
 /* Focus más suave para inputs */
 form input:focus {
-  box-shadow: 0 6px 18px rgba(46,139,87,0.08);
+  box-shadow: 0 6px 18px rgba(46, 139, 87, 0.08);
 }
 
 form input::placeholder {
   color: var(--texto-suave);
+}
+
+.password-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.password-wrapper input {
+  padding-right: 48px;
+}
+
+.password-toggle {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  border: none;
+  background: transparent;
+  color: var(--texto-suave);
+  cursor: pointer;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.password-toggle img {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+  display: block;
+}
+
+.password-toggle:hover {
+  background: rgba(255, 255, 255, 0.06);
+  box-shadow: none;
+  transform: translateY(-50%) scale(1.05);
 }
 
 button,
@@ -297,6 +349,7 @@ input[type="button"]:hover {
     opacity: 0;
     transform: translateY(12px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -304,14 +357,27 @@ input[type="button"]:hover {
 }
 
 @keyframes pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.02); }
-  100% { transform: scale(1); }
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.02);
+  }
+
+  100% {
+    transform: scale(1);
+  }
 }
 
 @keyframes shimmer {
-  0% { background-position: -200px 0; }
-  100% { background-position: 200px 0; }
+  0% {
+    background-position: -200px 0;
+  }
+
+  100% {
+    background-position: 200px 0;
+  }
 }
 
 /* Shimmer skeleton for loading states */
@@ -323,21 +389,49 @@ input[type="button"]:hover {
 }
 
 /* Small helpers */
-.muted { color: var(--texto-suave); }
+.muted {
+  color: var(--texto-suave);
+}
 
 /* Ficha juego layout */
-.ficha-juego { display: grid; gap: 20px; grid-template-columns: 1fr; }
-@media (min-width: 900px) { .ficha-juego { grid-template-columns: 360px 1fr; align-items: start; } }
+.ficha-juego {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: 1fr;
+}
 
-.ficha-cabecera img { width: 100%; max-width: 340px; border-radius: 8px; }
+@media (min-width: 900px) {
+  .ficha-juego {
+    grid-template-columns: 360px 1fr;
+    align-items: start;
+  }
+}
 
-.ficha-acciones { display:flex; gap:8px; margin-top:8px; }
+.ficha-cabecera img {
+  width: 100%;
+  max-width: 340px;
+  border-radius: 8px;
+}
 
-.tab { transition: background-color var(--transition), transform var(--transition); }
-.tab:hover { transform: translateY(-3px); }
+.ficha-acciones {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.tab {
+  transition: background-color var(--transition), transform var(--transition);
+}
+
+.tab:hover {
+  transform: translateY(-3px);
+}
 
 @media (prefers-reduced-motion: reduce) {
-  * { transition: none !important; animation: none !important; }
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
 }
 
 section,
@@ -362,7 +456,8 @@ section,
 }
 
 .juego-card:hover {
-  border-color: var(--verde);  /* Borde verde al pasar el mouse */
+  border-color: var(--verde);
+  /* Borde verde al pasar el mouse */
   transform: translateY(-4px);
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.18);
 }
@@ -376,7 +471,10 @@ section,
 
 /* Layout for larger screens */
 @media (min-width: 900px) {
-  .lista-juegos { grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .lista-juegos {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
 }
 
 .juego-card {
@@ -399,21 +497,32 @@ section,
   gap: 4px;
 }
 
-.juego-card .mejor-tienda { color: var(--texto-suave); font-size: 14px; }
+.juego-card .mejor-tienda {
+  color: var(--texto-suave);
+  font-size: 14px;
+}
 
-.juego-card { transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition); }
-.juego-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-soft); border-color: rgba(46,139,87,0.18); }
+.juego-card {
+  transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+}
+
+.juego-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-soft);
+  border-color: rgba(46, 139, 87, 0.18);
+}
 
 
 /* ===== PRECIOS ===== */
 .precio-actual {
-  color: var(--verde-medio);  /* Precio con descuento en verde */
+  color: var(--verde-medio);
+  /* Precio con descuento en verde */
   font-size: 18px;
   font-weight: 600;
 }
 
 .precio-destacado {
-  background: linear-gradient(180deg, rgba(26,107,58,0.06), transparent);
+  background: linear-gradient(180deg, rgba(26, 107, 58, 0.06), transparent);
   padding: 12px 16px;
   border-radius: 8px;
   display: inline-block;
@@ -421,28 +530,33 @@ section,
 
 .precio-original {
   color: var(--texto-suave);
-  text-decoration: line-through;  /* Precio original tachado */
+  text-decoration: line-through;
+  /* Precio original tachado */
   font-size: 14px;
 }
 
 .descuento {
-  color: var(--dorado);  /* Porcentaje de descuento en dorado */
+  color: var(--dorado);
+  /* Porcentaje de descuento en dorado */
   font-weight: 600;
 }
 
 .precio-ganador {
-  background-color: #1a2e1f;  /* Fondo verde oscuro para la fila ganadora en la tabla */
+  background-color: #1a2e1f;
+  /* Fondo verde oscuro para la fila ganadora en la tabla */
 }
 
 
 /* ===== TABLA DE PRECIOS ===== */
 table {
   width: 100%;
-  border-collapse: collapse;  /* Elimina el doble borde entre celdas */
+  border-collapse: collapse;
+  /* Elimina el doble borde entre celdas */
   margin-bottom: 24px;
 }
 
-th, td {
+th,
+td {
   padding: 12px 16px;
   text-align: left;
   border-bottom: 1px solid var(--borde);
@@ -455,11 +569,20 @@ th {
 }
 
 /* Table hover / winner row */
-tbody tr:hover { background: rgba(255,255,255,0.02); }
-tr.precio-ganador { background: linear-gradient(90deg, rgba(26,107,58,0.06), transparent); }
+tbody tr:hover {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+tr.precio-ganador {
+  background: linear-gradient(90deg, rgba(26, 107, 58, 0.06), transparent);
+}
 
 /* Make action links more button-like */
-table a { color: var(--verde); text-decoration: none; font-weight: 600; }
+table a {
+  color: var(--verde);
+  text-decoration: none;
+  font-weight: 600;
+}
 
 
 /* ===== FOOTER ===== */
@@ -556,15 +679,18 @@ footer {
 */
 @media (max-width: 600px) {
   .lista-juegos {
-    grid-template-columns: 1fr;  /* 1 columna en celular */
+    grid-template-columns: 1fr;
+    /* 1 columna en celular */
   }
 
   nav ul {
-    display: none;  /* Ocultás el menú en celular — después podés agregar un menú hamburguesa */
+    display: none;
+    /* Ocultás el menú en celular — después podés agregar un menú hamburguesa */
   }
 
   h1 {
-    font-size: 21px;  /* Título más chico en celular */
+    font-size: 21px;
+    /* Título más chico en celular */
   }
 
   .perfil-foto-contenedor {
@@ -596,6 +722,7 @@ footer {
 .sugerencias-lista li {
   border-bottom: 1px solid var(--borde);
 }
+
 .sugerencias-lista li:last-child {
   border-bottom: none;
 }
@@ -768,6 +895,7 @@ footer {
     align-items: flex-start;
     gap: 16px;
   }
+
   .alerta-acciones {
     width: 100%;
     justify-content: flex-end;
@@ -916,3 +1044,436 @@ footer {
   padding: 32px 0;
   font-family: var(--fuente-titulo);
 }
+
+/* ===== SECCIÓN AMIGOS & PRIVACIDAD ===== */
+.seccion-header-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.wishlist-privacidad {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.wishlist-privacidad label {
+  color: var(--texto-suave);
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.wishlist-privacidad select {
+  background-color: var(--superficie);
+  color: var(--texto);
+  border: 1px solid var(--borde);
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: var(--fuente-cuerpo);
+  font-weight: 600;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.wishlist-privacidad select:focus {
+  border-color: var(--verde);
+  box-shadow: 0 0 0 3px rgba(46, 139, 87, 0.15);
+}
+
+.amigos-buscar-contenedor {
+  background-color: var(--superficie);
+  border: 1px solid var(--borde);
+  border-radius: 8px;
+  padding: 24px;
+  margin-bottom: 32px;
+  box-shadow: var(--shadow-soft);
+}
+
+.amigos-buscar-contenedor h3 {
+  font-family: var(--fuente-titulo);
+  color: #fff;
+  margin-bottom: 6px;
+  font-size: 18px;
+}
+
+.amigos-ayuda-texto {
+  color: var(--texto-suave);
+  font-size: 14px;
+  margin-bottom: 16px;
+}
+
+.amigos-buscar-contenedor form {
+  display: flex;
+  gap: 12px;
+}
+
+.amigos-buscar-contenedor form input {
+  flex: 1;
+  background-color: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--borde);
+  color: var(--texto);
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-family: var(--fuente-cuerpo);
+  font-size: 15px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.amigos-buscar-contenedor form input:focus {
+  border-color: var(--verde);
+}
+
+.btn-primario-verde {
+  background-color: var(--verde);
+  border: 1px solid var(--verde);
+  color: #fff;
+  padding: 12px 24px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 15px;
+  border-radius: 8px;
+}
+
+.btn-primario-verde:hover {
+  background-color: #238c4f;
+  border-color: #238c4f;
+}
+
+/* Solicitudes de amistad */
+.solicitudes-seccion {
+  background-color: var(--superficie);
+  border: 1px solid var(--borde);
+  border-radius: 8px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.solicitudes-seccion h3 {
+  font-family: var(--fuente-titulo);
+  color: #fff;
+  margin-bottom: 20px;
+  font-size: 18px;
+}
+
+.solicitudes-grids {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+}
+
+@media (min-width: 768px) {
+  .solicitudes-grids {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.columna-solicitud h4 {
+  font-family: var(--fuente-titulo);
+  color: var(--texto-suave);
+  font-size: 15px;
+  margin-bottom: 12px;
+  border-bottom: 1px solid var(--borde);
+  padding-bottom: 6px;
+}
+
+#solicitudes-recibidas-contenedor h4 {
+  color: var(--dorado);
+}
+
+.lista-solicitudes {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.solicitud-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--borde);
+  border-radius: 6px;
+  padding: 12px 16px;
+}
+
+.solicitud-usuario {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.solicitud-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 2px solid var(--borde);
+  object-fit: cover;
+}
+
+.solicitud-nombre {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.solicitud-acciones {
+  display: flex;
+  gap: 6px;
+}
+
+.solicitud-acciones button {
+  padding: 6px 12px;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+}
+
+.btn-aceptar-amigo {
+  background-color: var(--verde-medio);
+  border: 1px solid var(--verde-medio);
+  color: #fff;
+}
+
+.btn-aceptar-amigo:hover {
+  background-color: #0d8a5e;
+}
+
+.btn-rechazar-amigo {
+  background-color: transparent;
+  border: 1px solid var(--borde);
+  color: var(--texto-suave);
+}
+
+.btn-rechazar-amigo:hover {
+  background-color: rgba(255, 77, 79, 0.1);
+  border-color: #ff4d4f;
+  color: #ff4d4f;
+}
+
+.btn-cancelar-solicitud {
+  background-color: transparent;
+  border: 1px solid var(--borde);
+  color: var(--texto-suave);
+}
+
+.btn-cancelar-solicitud:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+  color: #fff;
+}
+
+/* Lista de Amigos Grid */
+.lista-juegos-amigos {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  list-style: none;
+  padding: 0;
+}
+
+@media (min-width: 768px) {
+  .lista-juegos-amigos {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .lista-juegos-amigos {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.amigo-card {
+  background-color: var(--superficie);
+  border: 1px solid var(--borde);
+  border-radius: 8px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 16px;
+  transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s;
+}
+
+.amigo-card:hover {
+  border-color: var(--verde);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-soft);
+}
+
+.amigo-info {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.amigo-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 2px solid var(--verde);
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.amigo-detalles {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.amigo-nombre {
+  font-family: var(--fuente-titulo);
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.amigo-id {
+  color: var(--texto-suave);
+  font-size: 13px;
+}
+
+.amigo-status-badge {
+  font-size: 11px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  width: fit-content;
+  font-weight: 600;
+  margin-top: 2px;
+}
+
+.amigo-status-badge.publica {
+  background-color: rgba(46, 139, 87, 0.12);
+  color: var(--verde-medio);
+  border: 1px solid rgba(46, 139, 87, 0.2);
+}
+
+.amigo-status-badge.privada {
+  background-color: rgba(255, 255, 255, 0.05);
+  color: var(--texto-suave);
+  border: 1px solid var(--borde);
+}
+
+.amigo-acciones {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid var(--borde);
+  padding-top: 12px;
+  gap: 8px;
+}
+
+.amigo-acciones button {
+  padding: 8px 12px;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+}
+
+.btn-ver-wishlist {
+  background-color: var(--verde-medio);
+  border: 1px solid var(--verde-medio);
+  color: #fff;
+  flex: 1;
+}
+
+.btn-ver-wishlist:hover {
+  background-color: #0d8a5e;
+}
+
+.btn-ver-wishlist:disabled {
+  background-color: rgba(255, 255, 255, 0.02);
+  border-color: var(--borde);
+  color: var(--texto-suave);
+  cursor: not-allowed;
+}
+
+.btn-eliminar-amigo-icon {
+  background-color: transparent;
+  border: 1px solid var(--borde);
+  color: #ff4d4f;
+  aspect-ratio: 1;
+  padding: 8px !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-eliminar-amigo-icon:hover {
+  background-color: #ff4d4f;
+  color: #fff;
+  border-color: #ff4d4f;
+}
+
+/* Modal de Wishlist Amigo */
+.modal-wishlist-amigo-content {
+  max-width: 680px;
+  width: 95%;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+}
+
+.modal-wishlist-amigo-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--borde);
+  padding-bottom: 16px;
+  margin-bottom: 16px;
+}
+
+.modal-wishlist-amigo-header h2 {
+  font-family: var(--fuente-titulo);
+  color: #fff;
+  font-size: 20px;
+  margin-bottom: 0;
+}
+
+#btn-cerrar-wishlist-modal {
+  background: transparent;
+  border: none;
+  color: var(--texto-suave);
+  font-size: 28px;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0;
+  transition: color 0.2s;
+}
+
+#btn-cerrar-wishlist-modal:hover {
+  color: #ff4d4f;
+}
+
+.modal-wishlist-amigo-body {
+  overflow-y: auto;
+  flex: 1;
+  margin-bottom: 0;
+}
+
+#modal-lista-wishlist-amigo {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  list-style: none;
+  padding: 0;
+}
+
+@media (min-width: 600px) {
+  #modal-lista-wishlist-amigo {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

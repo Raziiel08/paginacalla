@@ -10,8 +10,9 @@ require_once 'php/conexion.php';
 
 $usuario_id = $_SESSION['usuario_id'];
 $foto_perfil = 'default.jpg';
+$wishlist_publica = 1;
 
-$sql = "SELECT foto FROM usuarios WHERE id = ?";
+$sql = "SELECT foto, wishlist_publica FROM usuarios WHERE id = ?";
 $stmt = $conexion->prepare($sql);
 $stmt->bind_param('i', $usuario_id);
 $stmt->execute();
@@ -22,6 +23,7 @@ if ($result->num_rows > 0) {
     if (!empty($row['foto']) && $row['foto'] !== 'default.jpg') {
         $foto_perfil = $row['foto'];
     }
+    $wishlist_publica = isset($row['wishlist_publica']) ? intval($row['wishlist_publica']) : 1;
 }
 
 $stmt->close();
@@ -107,6 +109,7 @@ $conexion->close();
           <h1>Mi perfil</h1>
           <ul class="perfil-meta">
             <li>Usuario: <strong id="perfil-nombre"><?php echo $_SESSION['usuario_nombre']; ?></strong></li>
+            <li>ID: <strong id="perfil-id">#<?php echo $_SESSION['usuario_id']; ?></strong></li>
             <li>Email: <strong id="perfil-email"><?php echo $_SESSION['usuario_email']; ?></strong></li>
             <li>Miembro desde: <strong id="perfil-fecha"><?php echo date('d/m/Y', strtotime($_SESSION['usuario_fecha'])); ?></strong></li>
           </ul>
@@ -119,11 +122,21 @@ $conexion->close();
       <button type="button" id="tab-wishlist" class="tab activo">♥ Mi Wishlist</button>
       <button type="button" id="tab-alertas" class="tab">🔔 Mis Alertas</button>
       <button type="button" id="tab-historial" class="tab">🕓 Historial</button>
+      <button type="button" id="tab-amigos" class="tab">👥 Amigos</button>
     </div>
 
     <!-- ===== WISHLIST ===== -->
     <section id="seccion-wishlist">
-      <h2>Mi Wishlist</h2>
+      <div class="seccion-header-flex">
+        <h2>Mi Wishlist</h2>
+        <div class="wishlist-privacidad">
+          <label for="privacidad-wishlist">Visibilidad: </label>
+          <select id="privacidad-wishlist">
+            <option value="1" <?php echo $wishlist_publica === 1 ? 'selected' : ''; ?>>Pública</option>
+            <option value="0" <?php echo $wishlist_publica === 0 ? 'selected' : ''; ?>>Privada</option>
+          </select>
+        </div>
+      </div>
 
       <!--
         Esta lista se llena dinámicamente desde la BD (tabla wishlist)
@@ -180,7 +193,65 @@ $conexion->close();
 
     </section>
 
+    <!-- ===== SECCIÓN AMIGOS ===== -->
+    <section id="seccion-amigos" hidden>
+      <h2>Mis Amigos</h2>
+
+      <div class="amigos-buscar-contenedor">
+        <h3>Agregar amigo</h3>
+        <p class="amigos-ayuda-texto">Ingresá el nombre de usuario o el #ID de tu amigo para enviarle una solicitud.</p>
+        <form id="form-agregar-amigo">
+          <input type="text" id="input-amigo-busqueda" placeholder="Ej: elias o #3" required />
+          <button type="submit" class="btn-primario-verde">Agregar Amigo</button>
+        </form>
+      </div>
+
+      <!-- Solicitudes pendientes -->
+      <div id="contenedor-solicitudes" class="solicitudes-seccion" hidden>
+        <h3>Solicitudes Pendientes</h3>
+        <div class="solicitudes-grids">
+          <div id="solicitudes-recibidas-contenedor" class="columna-solicitud">
+            <h4>Recibidas</h4>
+            <ul id="lista-solicitudes-recibidas" class="lista-solicitudes"></ul>
+          </div>
+          <div id="solicitudes-enviadas-contenedor" class="columna-solicitud">
+            <h4>Enviadas</h4>
+            <ul id="lista-solicitudes-enviadas" class="lista-solicitudes"></ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Grid de amigos -->
+      <div class="lista-amigos-seccion">
+        <h3>Tus Amigos</h3>
+        <ul id="lista-amigos" class="lista-juegos-amigos">
+          <!-- Cargado con JS -->
+        </ul>
+        <p id="amigos-vacio" hidden>
+          Todavía no tenés amigos agregados.
+        </p>
+      </div>
+    </section>
+
   </main>
+
+  <!-- ===== MODAL WISHLIST AMIGO ===== -->
+  <div id="modal-wishlist-amigo" class="modal-overlay">
+    <div class="modal-content modal-wishlist-amigo-content">
+      <div class="modal-header modal-wishlist-amigo-header">
+        <h2 id="modal-wishlist-titulo">Wishlist de Amigo</h2>
+        <button type="button" id="btn-cerrar-wishlist-modal">&times;</button>
+      </div>
+      <div class="modal-body modal-wishlist-amigo-body">
+        <ul class="lista-juegos" id="modal-lista-wishlist-amigo">
+          <!-- Juegos del amigo -->
+        </ul>
+        <p id="modal-wishlist-amigo-vacia" hidden>
+          Este amigo no tiene juegos en su wishlist.
+        </p>
+      </div>
+    </div>
+  </div>
 
   <!-- ===== PIE DE PÁGINA ===== -->
   <footer>

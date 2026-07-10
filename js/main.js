@@ -19,15 +19,15 @@ function showToast(mensaje, tipo = 'success') {
         container.id = 'toast-container';
         document.body.appendChild(container);
     }
-    
+
     var toast = document.createElement('div');
     toast.className = 'toast toast-' + tipo;
     toast.innerHTML = (tipo === 'success' ? '✅ ' : '❌ ') + mensaje;
-    
+
     container.appendChild(toast);
-    
+
     setTimeout(() => toast.classList.add('show'), 10);
-    
+
     // Se remueve despues de 3 segundos
     setTimeout(() => {
         toast.classList.remove('show');
@@ -46,7 +46,7 @@ function guardarHistorialBusqueda(nombreJuego) {
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: 'game_nombre=' + encodeURIComponent(nombre),
         keepalive: true
-    }).catch(function() {});
+    }).catch(function () { });
 }
 
 // ================================================
@@ -60,14 +60,14 @@ var timeoutIdBusqueda;
 if (inputBusqueda) {
     // Autocompletado en tiempo real
     if (sugerencias) {
-        sugerencias.addEventListener('click', function(e) {
+        sugerencias.addEventListener('click', function (e) {
             var link = e.target.closest('a[data-game-name]');
             if (link) {
                 guardarHistorialBusqueda(link.dataset.gameName);
             }
         });
 
-        inputBusqueda.addEventListener('input', function(e) {
+        inputBusqueda.addEventListener('input', function (e) {
             clearTimeout(timeoutIdBusqueda);
             var q = e.target.value.trim();
             if (q.length < 3) {
@@ -100,14 +100,14 @@ if (inputBusqueda) {
         });
 
         // Cerrar sugerencias al hacer clic afuera
-        document.addEventListener('click', function(e) {
+        document.addEventListener('click', function (e) {
             if (!e.target.closest('#busqueda-form')) {
                 sugerencias.hidden = true;
             }
         });
     }
 
-    inputBusqueda.addEventListener('keydown', function(evento) {
+    inputBusqueda.addEventListener('keydown', function (evento) {
         if (evento.key === 'Enter') {
             var termino = inputBusqueda.value;
             if (termino == '') return;
@@ -119,7 +119,7 @@ if (inputBusqueda) {
 var botonBuscar = document.querySelector('#busqueda-form button[type="submit"]');
 
 if (botonBuscar) {
-    botonBuscar.addEventListener('click', function(evento) {
+    botonBuscar.addEventListener('click', function (evento) {
         evento.preventDefault();
         var termino = inputBusqueda.value;
         if (termino == '') return;
@@ -138,8 +138,8 @@ var listaOfertas = document.getElementById('lista-ofertas');
 if (listaOfertas) {
 
     var tiendasNombres = {
-        '1':  'Steam',
-        '7':  'GOG',
+        '1': 'Steam',
+        '7': 'GOG',
         '11': 'Humble Store',
         '14': 'Green Man Gaming',
         '21': 'GamersGate',
@@ -148,8 +148,8 @@ if (listaOfertas) {
 
     // Traemos las 6 mejores ofertas de las tiendas permitidas, ordenadas por ahorro
     fetch('https://www.cheapshark.com/api/1.0/deals?storeID=1,7,11,14,21,25&pageSize=6&sortBy=Savings&onSale=1')
-        .then(function(r) { return r.json(); })
-        .then(function(deals) {
+        .then(function (r) { return r.json(); })
+        .then(function (deals) {
 
             if (!deals || deals.length === 0) {
                 listaOfertas.innerHTML = '';
@@ -163,10 +163,10 @@ if (listaOfertas) {
             for (var i = 0; i < deals.length; i++) {
                 var deal = deals[i];
 
-                var precioVenta   = parseFloat(deal.salePrice).toFixed(2);
-                var precioNormal  = parseFloat(deal.normalPrice).toFixed(2);
-                var ahorro        = Math.round(parseFloat(deal.savings));
-                var nombreTienda  = tiendasNombres[deal.storeID] || 'Tienda';
+                var precioVenta = parseFloat(deal.salePrice).toFixed(2);
+                var precioNormal = parseFloat(deal.normalPrice).toFixed(2);
+                var ahorro = Math.round(parseFloat(deal.savings));
+                var nombreTienda = tiendasNombres[deal.storeID] || 'Tienda';
 
                 var li = document.createElement('li');
                 li.className = 'juego-card';
@@ -174,20 +174,20 @@ if (listaOfertas) {
 
                 li.innerHTML =
                     '<a href="juego.php?id=' + deal.gameID + '">' +
-                        '<img src="' + deal.thumb + '" alt="' + deal.title + '" loading="lazy" />' +
-                        '<div class="juego-info">' +
-                            '<h3>' + deal.title + '</h3>' +
-                            '<p class="precio-actual">$' + precioVenta + '</p>' +
-                            (ahorro > 0 ? '<p class="precio-original">$' + precioNormal + '</p>' : '') +
-                            (ahorro > 0 ? '<span class="descuento">-' + ahorro + '%</span>' : '') +
-                            '<p class="mejor-tienda">Mejor precio: ' + nombreTienda + '</p>' +
-                        '</div>' +
+                    '<img src="' + deal.thumb + '" alt="' + deal.title + '" loading="lazy" />' +
+                    '<div class="juego-info">' +
+                    '<h3>' + deal.title + '</h3>' +
+                    '<p class="precio-actual">$' + precioVenta + '</p>' +
+                    (ahorro > 0 ? '<p class="precio-original">$' + precioNormal + '</p>' : '') +
+                    (ahorro > 0 ? '<span class="descuento">-' + ahorro + '%</span>' : '') +
+                    '<p class="mejor-tienda">Mejor precio: ' + nombreTienda + '</p>' +
+                    '</div>' +
                     '</a>';
 
                 listaOfertas.appendChild(li);
             }
         })
-        .catch(function(err) {
+        .catch(function (err) {
             console.error('Error cargando ofertas destacadas:', err);
             listaOfertas.innerHTML = '';
             var errorMsg = document.getElementById('ofertas-error');
@@ -210,13 +210,13 @@ if (tablaPrecios) {
 
     // Las 4 tiendas que queremos mostrar
     var tiendas = {
-    '1':  'Steam',
-    '7':  'GOG',
-    '11': 'Humble Store',
-    '14': 'Green Man Gaming',
-    '21': 'GamersGate',
-    '25': 'Epic Games Store'
-};
+        '1': 'Steam',
+        '7': 'GOG',
+        '11': 'Humble Store',
+        '14': 'Green Man Gaming',
+        '21': 'GamersGate',
+        '25': 'Epic Games Store'
+    };
 
     var tiendasPermitidas = ['1', '7', '11', '14', '21', '25'];
 
@@ -225,8 +225,8 @@ if (tablaPrecios) {
     // Pedimos 10 resultados para encontrar el mejor
     // ------------------------------------------------
     fetch('https://www.cheapshark.com/api/1.0/games?title=' + encodeURIComponent(terminoBuscado) + '&limit=10')
-        .then(function(r) { return r.json(); })
-        .then(function(juegos) {
+        .then(function (r) { return r.json(); })
+        .then(function (juegos) {
 
             if (juegos.length == 0) {
                 if (mensajeCarga) mensajeCarga.hidden = true;
@@ -273,8 +273,8 @@ if (tablaPrecios) {
             // No históricos, no duplicados — precio actual y punto
             // ------------------------------------------------
             return fetch('https://www.cheapshark.com/api/1.0/games?id=' + juegoEncontrado.gameID)
-                .then(function(r) { return r.json(); })
-                .then(function(detalle) {
+                .then(function (r) { return r.json(); })
+                .then(function (detalle) {
 
                     if (mensajeCarga) mensajeCarga.hidden = true;
                     tablaPrecios.innerHTML = '';
@@ -291,7 +291,7 @@ if (tablaPrecios) {
                     // ------------------------------------------------
                     // PASO 4: Filtrar solo Steam, GOG, Epic, Microsoft
                     // ------------------------------------------------
-                    deals = deals.filter(function(deal) {
+                    deals = deals.filter(function (deal) {
                         return tiendasPermitidas.includes(deal.storeID);
                     });
 
@@ -310,7 +310,7 @@ if (tablaPrecios) {
                     }
 
                     // Ordenamos de menor a mayor precio
-                    deals.sort(function(a, b) {
+                    deals.sort(function (a, b) {
                         return parseFloat(a.price) - parseFloat(b.price);
                     });
 
@@ -323,9 +323,9 @@ if (tablaPrecios) {
 
                         if (i == 0) fila.classList.add('precio-ganador');
 
-                        var nombreTienda   = tiendas[deal.storeID] || 'Otra tienda';
-                        var precioActual   = parseFloat(deal.price).toFixed(2);
-                        
+                        var nombreTienda = tiendas[deal.storeID] || 'Otra tienda';
+                        var precioActual = parseFloat(deal.price).toFixed(2);
+
                         // Si una tienda reporta un precio original menor al máximo precio de lista del juego (MSRP),
                         // asumimos el precio máximo detectado como el precio de venta original oficial.
                         var originalVal = parseFloat(deal.retailPrice);
@@ -345,14 +345,14 @@ if (tablaPrecios) {
                         fila.innerHTML =
                             '<td>' + (i == 0 ? '🥇 ' : '') + nombreTienda + '</td>' +
                             '<td>' +
-                                (descuento > 0
-                                    ? '<span class="precio-original">$' + precioOriginal + '</span> '
-                                    : ''
-                                ) +
-                                '<span class="precio-actual">$' + precioActual + '</span>' +
+                            (descuento > 0
+                                ? '<span class="precio-original">$' + precioOriginal + '</span> '
+                                : ''
+                            ) +
+                            '<span class="precio-actual">$' + precioActual + '</span>' +
                             '</td>' +
                             '<td class="descuento">' +
-                                (descuento > 0 ? '-' + descuento + '%' : 'Precio normal') +
+                            (descuento > 0 ? '-' + descuento + '%' : 'Precio normal') +
                             '</td>' +
                             '<td><a href="' + linkCompra + '" target="_blank" rel="noopener">Ir a la tienda</a></td>';
 
@@ -367,7 +367,7 @@ if (tablaPrecios) {
                     }
                 });
         })
-        .catch(function(error) {
+        .catch(function (error) {
             if (mensajeCarga) mensajeCarga.hidden = true;
             console.log('Error con la API:', error);
         });
@@ -393,8 +393,8 @@ if (fichaJuego) {
         fichaJuego.hidden = true;
 
         var tiendas = {
-            '1':  'Steam',
-            '7':  'GOG',
+            '1': 'Steam',
+            '7': 'GOG',
             '11': 'Humble Store',
             '14': 'Green Man Gaming',
             '21': 'GamersGate',
@@ -403,8 +403,8 @@ if (fichaJuego) {
         var tiendasPermitidas = ['1', '7', '11', '14', '21', '25'];
 
         fetch('https://www.cheapshark.com/api/1.0/games?id=' + gameId)
-            .then(function(r) { return r.json(); })
-            .then(function(detalle) {
+            .then(function (r) { return r.json(); })
+            .then(function (detalle) {
                 if (mensajeCarga) mensajeCarga.hidden = true;
 
                 if (!detalle || !detalle.info) {
@@ -423,7 +423,7 @@ if (fichaJuego) {
                 // 1. Datos básicos
                 document.getElementById('breadcrumb-nombre').textContent = detalle.info.title;
                 document.getElementById('juego-nombre').textContent = detalle.info.title;
-                
+
                 var portada = document.getElementById('juego-portada');
                 if (portada) {
                     portada.src = detalle.info.thumb || 'assets/img/placeholder.jpg';
@@ -434,41 +434,41 @@ if (fichaJuego) {
                 document.getElementById('juego-desarrollador').textContent = 'Multiplataforma';
                 document.getElementById('juego-generos').textContent = 'Videojuego';
                 document.getElementById('juego-fecha').textContent = 'N/D';
-                document.getElementById('juego-descripcion').textContent = 
+                document.getElementById('juego-descripcion').textContent =
                     'Seguí el precio de ' + detalle.info.title + ' en tiempo real. Te enviaremos una alerta de correo en cuanto detectemos una oferta en Steam, GOG, Epic Games u otras tiendas asociadas que coincida con tu precio objetivo.';
 
                 // 2. Procesar ofertas
                 var deals = detalle.deals || [];
-                deals = deals.filter(function(deal) {
+                deals = deals.filter(function (deal) {
                     return tiendasPermitidas.includes(deal.storeID);
                 });
 
                 var tablaPreciosDetalle = document.getElementById('tabla-precios-detalle');
                 if (tablaPreciosDetalle) {
                     tablaPreciosDetalle.innerHTML = '';
-                    
+
                     if (deals.length == 0) {
                         tablaPreciosDetalle.innerHTML = '<tr><td colspan="4" style="text-align: center;">No hay ofertas disponibles en este momento.</td></tr>';
                     } else {
                         // Ordenar por precio
-                        deals.sort(function(a, b) {
+                        deals.sort(function (a, b) {
                             return parseFloat(a.price) - parseFloat(b.price);
                         });
 
                         // Calcular MSRP (Original) máximo para corregir el bug de descuentos
                         var maxRetail = 0;
-                        deals.forEach(function(d) {
+                        deals.forEach(function (d) {
                             var rPrice = parseFloat(d.retailPrice);
                             if (rPrice > maxRetail) maxRetail = rPrice;
                         });
 
                         // Renderizar filas
-                        deals.forEach(function(deal, index) {
+                        deals.forEach(function (deal, index) {
                             var fila = document.createElement('tr');
                             if (index == 0) fila.className = 'precio-ganador';
 
-                            var nombreTienda   = tiendas[deal.storeID] || 'Otra tienda';
-                            var precioActual   = parseFloat(deal.price).toFixed(2);
+                            var nombreTienda = tiendas[deal.storeID] || 'Otra tienda';
+                            var precioActual = parseFloat(deal.price).toFixed(2);
                             var precioOriginal = parseFloat(deal.retailPrice);
 
                             // Aplicar MSRP máximo si el deal tiene un retailPrice igual o menor al salePrice (Steam bug)
@@ -486,14 +486,14 @@ if (fichaJuego) {
                             fila.innerHTML =
                                 '<td>' + (index == 0 ? '🥇 ' : '') + nombreTienda + '</td>' +
                                 '<td>' +
-                                    (descuento > 0
-                                        ? '<span class="precio-original">$' + precioOriginal.toFixed(2) + '</span> '
-                                        : ''
-                                    ) +
-                                    '<span class="precio-actual">$' + precioActual + '</span>' +
+                                (descuento > 0
+                                    ? '<span class="precio-original">$' + precioOriginal.toFixed(2) + '</span> '
+                                    : ''
+                                ) +
+                                '<span class="precio-actual">$' + precioActual + '</span>' +
                                 '</td>' +
                                 '<td class="descuento">' +
-                                    (descuento > 0 ? '-' + descuento + '%' : 'Precio normal') +
+                                (descuento > 0 ? '-' + descuento + '%' : 'Precio normal') +
                                 '</td>' +
                                 '<td><a href="' + linkCompra + '" target="_blank" rel="noopener">Ir a la tienda</a></td>';
 
@@ -505,7 +505,7 @@ if (fichaJuego) {
                         var precioMin = parseFloat(mejorDeal.price).toFixed(2);
                         var precioOriginalMin = parseFloat(mejorDeal.retailPrice);
                         if (precioOriginalMin < maxRetail) precioOriginalMin = maxRetail;
-                        
+
                         var descMax = 0;
                         if (precioOriginalMin > 0 && parseFloat(mejorDeal.price) < precioOriginalMin) {
                             descMax = Math.round((1 - parseFloat(mejorDeal.price) / precioOriginalMin) * 100);
@@ -517,7 +517,7 @@ if (fichaJuego) {
                             descSpan.textContent = descMax > 0 ? '-' + descMax + '%' : 'Precio Normal';
                         }
                         document.getElementById('juego-mejor-tienda').textContent = tiendas[mejorDeal.storeID] || 'Tienda';
-                        
+
                         var linkCompraBanner = document.getElementById('juego-link-compra');
                         if (linkCompraBanner) {
                             linkCompraBanner.href = 'https://www.cheapshark.com/redirect?dealID=' + mejorDeal.dealID;
@@ -530,14 +530,14 @@ if (fichaJuego) {
                 document.getElementById('historico-min').textContent = '$' + histMin;
                 var histMax = maxRetail > 0 ? maxRetail.toFixed(2) : (parseFloat(histMin) * 1.5).toFixed(2);
                 document.getElementById('historico-max').textContent = '$' + histMax;
-                
+
                 var vsMin = 0;
                 if (parseFloat(histMin) > 0) {
                     vsMin = Math.round(((parseFloat(deals[0] ? deals[0].price : histMin) - parseFloat(histMin)) / parseFloat(histMin)) * 100);
                 }
                 document.getElementById('historico-vs-min').textContent = vsMin > 0 ? '+' + vsMin + '%' : 'Mínimo Histórico';
 
-                
+
                 // GRÁFICO CON CHART.JS
                 var ctx = document.getElementById('grafico-historico');
                 if (ctx && window.Chart) {
@@ -547,7 +547,7 @@ if (fichaJuego) {
 
                     // Formatear fechas para los labels (podemos aproximarlas o usar etiquetas genéricas)
                     var fechaMinima = new Date(detalle.cheapestPriceEver.date * 1000).toLocaleDateString('es-AR');
-                    
+
                     new Chart(ctx, {
                         type: 'line',
                         data: {
@@ -555,7 +555,7 @@ if (fichaJuego) {
                             datasets: [{
                                 label: 'Evolución de Precio (USD)',
                                 data: [maxNumber, minNumber, precioActualNumber],
-                                borderColor: '#10b981', 
+                                borderColor: '#10b981',
                                 backgroundColor: 'rgba(16, 185, 129, 0.2)',
                                 borderWidth: 3,
                                 pointBackgroundColor: '#ffffff',
@@ -584,7 +584,7 @@ if (fichaJuego) {
                                     },
                                     ticks: {
                                         color: '#e5e7eb',
-                                        callback: function(value) {
+                                        callback: function (value) {
                                             return '$' + value;
                                         }
                                     }
@@ -602,7 +602,7 @@ if (fichaJuego) {
                     });
                 }
             })
-            .catch(function(err) {
+            .catch(function (err) {
                 if (mensajeCarga) mensajeCarga.hidden = true;
                 if (mensajeError) mensajeError.hidden = false;
                 console.error('Error cargando ficha:', err);
@@ -614,35 +614,35 @@ if (fichaJuego) {
 // TABS — auth.html
 // ================================================
 
-var tabLogin        = document.getElementById('tab-login');
-var tabRegistro     = document.getElementById('tab-registro');
-var seccionLogin    = document.getElementById('seccion-login');
+var tabLogin = document.getElementById('tab-login');
+var tabRegistro = document.getElementById('tab-registro');
+var seccionLogin = document.getElementById('seccion-login');
 var seccionRegistro = document.getElementById('seccion-registro');
 
 if (tabLogin && tabRegistro) {
 
-    tabLogin.addEventListener('click', function() {
-        seccionLogin.hidden    = false;
+    tabLogin.addEventListener('click', function () {
+        seccionLogin.hidden = false;
         seccionRegistro.hidden = true;
         tabLogin.classList.add('activo');
         tabRegistro.classList.remove('activo');
     });
 
-    tabRegistro.addEventListener('click', function() {
-        seccionLogin.hidden    = true;
+    tabRegistro.addEventListener('click', function () {
+        seccionLogin.hidden = true;
         seccionRegistro.hidden = false;
         tabRegistro.classList.add('activo');
         tabLogin.classList.remove('activo');
     });
 
     var irRegistro = document.getElementById('ir-registro');
-    var irLogin    = document.getElementById('ir-login');
+    var irLogin = document.getElementById('ir-login');
 
     if (irRegistro) {
-        irRegistro.addEventListener('click', function() { tabRegistro.click(); });
+        irRegistro.addEventListener('click', function () { tabRegistro.click(); });
     }
     if (irLogin) {
-        irLogin.addEventListener('click', function() { tabLogin.click(); });
+        irLogin.addEventListener('click', function () { tabLogin.click(); });
     }
 
     if (window.location.hash === '#seccion-registro') {
@@ -650,35 +650,70 @@ if (tabLogin && tabRegistro) {
     }
 }
 
+// ================================================
+// CONTRASEÑAS — mostrar / ocultar
+// ================================================
+
+var togglesPassword = document.querySelectorAll('.password-toggle');
+
+togglesPassword.forEach(function (toggle) {
+    toggle.addEventListener('click', function () {
+        var targetId = this.getAttribute('data-target');
+        var input = document.getElementById(targetId);
+
+        if (!input) {
+            return;
+        }
+
+        var mostrar = input.type === 'password';
+        input.type = mostrar ? 'text' : 'password';
+        this.innerHTML = mostrar ? '<img src="assets/img/invisible.png" alt="Ocultar contraseña">' : '<img src="assets/img/vista.png" alt="Mostrar contraseña">';
+        this.setAttribute('aria-label', mostrar ? 'Ocultar contraseña' : 'Mostrar contraseña');
+        this.setAttribute('aria-pressed', mostrar ? 'true' : 'false');
+    });
+});
+
 
 // ================================================
 // TABS — perfil.php
 // ================================================
 
-var tabWishlist  = document.getElementById('tab-wishlist');
-var tabAlertas   = document.getElementById('tab-alertas');
+var tabWishlist = document.getElementById('tab-wishlist');
+var tabAlertas = document.getElementById('tab-alertas');
 var tabHistorial = document.getElementById('tab-historial');
+var tabAmigos = document.getElementById('tab-amigos');
 
-var seccionWishlist  = document.getElementById('seccion-wishlist');
-var seccionAlertas   = document.getElementById('seccion-alertas');
+var seccionWishlist = document.getElementById('seccion-wishlist');
+var seccionAlertas = document.getElementById('seccion-alertas');
 var seccionHistorial = document.getElementById('seccion-historial');
+var seccionAmigos = document.getElementById('seccion-amigos');
 
 if (tabWishlist && tabAlertas && tabHistorial) {
 
     function cambiarTab(seccionActiva, tabActivo) {
-        seccionWishlist.hidden  = true;
-        seccionAlertas.hidden   = true;
+        seccionWishlist.hidden = true;
+        seccionAlertas.hidden = true;
         seccionHistorial.hidden = true;
+        if (seccionAmigos) seccionAmigos.hidden = true;
+
         tabWishlist.classList.remove('activo');
         tabAlertas.classList.remove('activo');
         tabHistorial.classList.remove('activo');
+        if (tabAmigos) tabAmigos.classList.remove('activo');
+
         seccionActiva.hidden = false;
         tabActivo.classList.add('activo');
     }
 
-    tabWishlist.addEventListener('click', function() { cambiarTab(seccionWishlist, tabWishlist); });
-    tabAlertas.addEventListener('click', function() { cambiarTab(seccionAlertas, tabAlertas); });
-    tabHistorial.addEventListener('click', function() { cambiarTab(seccionHistorial, tabHistorial); });
+    tabWishlist.addEventListener('click', function () { cambiarTab(seccionWishlist, tabWishlist); });
+    tabAlertas.addEventListener('click', function () { cambiarTab(seccionAlertas, tabAlertas); });
+    tabHistorial.addEventListener('click', function () { cambiarTab(seccionHistorial, tabHistorial); });
+    if (tabAmigos && seccionAmigos) {
+        tabAmigos.addEventListener('click', function () { 
+            cambiarTab(seccionAmigos, tabAmigos); 
+            cargarSeccionAmigos();
+        });
+    }
 
     // Activar pestaña según el parámetro de URL ?tab=...
     var tabParam = leerURL('tab');
@@ -688,6 +723,8 @@ if (tabWishlist && tabAlertas && tabHistorial) {
         tabHistorial.click();
     } else if (tabParam === 'wishlist') {
         tabWishlist.click();
+    } else if (tabParam === 'amigos' && tabAmigos) {
+        tabAmigos.click();
     }
 }
 
@@ -699,15 +736,15 @@ if (tabWishlist && tabAlertas && tabHistorial) {
 var formRegistro = document.querySelector('#seccion-registro form');
 
 if (formRegistro) {
-    formRegistro.addEventListener('submit', function(evento) {
-        var email             = document.getElementById('registro-email').value.trim();
-        var password          = document.getElementById('registro-password').value;
+    formRegistro.addEventListener('submit', function (evento) {
+        var email = document.getElementById('registro-email').value.trim();
+        var password = document.getElementById('registro-password').value;
         var passwordConfirmar = document.getElementById('registro-password-confirmar').value;
-        var errorContrasena   = document.getElementById('registro-error');
-        var errorEmail        = document.getElementById('registro-email-error');
-        var errorPassword     = document.getElementById('registro-password-error');
-        var esEmailValido     = /^[a-z0-9._%+\-]+@(gmail\.com|hotmail\.com|outlook\.com|live\.com|yahoo\.com|yahoo\.es|icloud\.com|protonmail\.com|mail\.com|aol\.com|msn\.com|outlook\.es)$/i.test(email);
-        var esPasswordValida  = /^(?=.*[A-Z])(?=.*[^A-Za-z0-9]).{8,}$/.test(password);
+        var errorContrasena = document.getElementById('registro-error');
+        var errorEmail = document.getElementById('registro-email-error');
+        var errorPassword = document.getElementById('registro-password-error');
+        var esEmailValido = /^[a-z0-9._%+\-]+@(gmail\.com|hotmail\.com|outlook\.com|live\.com|yahoo\.com|yahoo\.es|icloud\.com|protonmail\.com|mail\.com|aol\.com|msn\.com|outlook\.es)$/i.test(email);
+        var esPasswordValida = /^(?=.*[A-Z])(?=.*[^A-Za-z0-9]).{8,}$/.test(password);
 
         errorContrasena.hidden = true;
         errorEmail.hidden = true;
@@ -743,7 +780,7 @@ if (formRegistro) {
 var botonWishlist = document.getElementById('btn-wishlist');
 
 if (botonWishlist) {
-    botonWishlist.addEventListener('click', function() {
+    botonWishlist.addEventListener('click', function () {
 
         if (!juegoActual) {
             showToast('Primero buscá un juego', 'error');
@@ -754,21 +791,21 @@ if (botonWishlist) {
             method: 'POST',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             body: 'game_id=' + encodeURIComponent(juegoActual.gameID) +
-                  '&game_nombre=' + encodeURIComponent(juegoActual.external)
+                '&game_nombre=' + encodeURIComponent(juegoActual.external)
         })
-        .then(function(r) { return r.json(); })
-        .then(function(resultado) {
-            if (resultado.ok) {
-                botonWishlist.textContent = '♥ Guardado en wishlist';
-                botonWishlist.disabled = true;
-                showToast('Juego guardado en tu wishlist', 'success');
-            } else {
-                showToast(resultado.mensaje, 'error');
-            }
-        })
-        .catch(function(error) {
-            console.log('Error wishlist:', error);
-        });
+            .then(function (r) { return r.json(); })
+            .then(function (resultado) {
+                if (resultado.ok) {
+                    botonWishlist.textContent = '♥ Guardado en wishlist';
+                    botonWishlist.disabled = true;
+                    showToast('Juego guardado en tu wishlist', 'success');
+                } else {
+                    showToast(resultado.mensaje, 'error');
+                }
+            })
+            .catch(function (error) {
+                console.log('Error wishlist:', error);
+            });
     });
 }
 
@@ -780,8 +817,8 @@ var listaWishlist = document.getElementById('lista-wishlist');
 
 if (listaWishlist) {
     fetch('php/wishlist/obtener_wishlist.php')
-        .then(function(r) { return r.json(); })
-        .then(function(juegos) {
+        .then(function (r) { return r.json(); })
+        .then(function (juegos) {
 
             if (juegos.length == 0) {
                 document.getElementById('wishlist-vacia').hidden = false;
@@ -798,22 +835,22 @@ if (listaWishlist) {
                 li.innerHTML =
                     '<img id="wishlist-img-' + j.game_id + '" src="assets/img/placeholder.jpg" alt="' + j.game_nombre + '" />' +
                     '<div class="juego-info">' +
-                        '<h3><a href="juego.php?id=' + j.game_id + '">' + j.game_nombre + '</a></h3>' +
-                        '<p class="fecha-agregado">Agregado el ' + new Date(j.fecha_agregado).toLocaleDateString('es-AR') + '</p>' +
+                    '<h3><a href="juego.php?id=' + j.game_id + '">' + j.game_nombre + '</a></h3>' +
+                    '<p class="fecha-agregado">Agregado el ' + new Date(j.fecha_agregado).toLocaleDateString('es-AR') + '</p>' +
                     '</div>' +
                     '<div class="juego-acciones">' +
-                        '<a href="juego.php?id=' + j.game_id + '">Ver precios</a>' +
-                        '<button type="button" class="btn-quitar-wishlist" data-id="' + j.game_id + '">Quitar de wishlist</button>' +
+                    '<a href="juego.php?id=' + j.game_id + '">Ver precios</a>' +
+                    '<button type="button" class="btn-quitar-wishlist" data-id="' + j.game_id + '">Quitar de wishlist</button>' +
                     '</div>';
                 listaWishlist.appendChild(li);
             }
 
             //Mostrar las portadas de los juegos en la wishlist.
-            var ids = juegos.map(function(j) { return j.game_id; }).join(',');
+            var ids = juegos.map(function (j) { return j.game_id; }).join(',');
             if (ids !== '') {
                 fetch('https://www.cheapshark.com/api/1.0/games?ids=' + ids)
-                    .then(function(r) { return r.json(); })
-                    .then(function(detalles) {
+                    .then(function (r) { return r.json(); })
+                    .then(function (detalles) {
                         for (var i = 0; i < juegos.length; i++) {
                             var gid = juegos[i].game_id;
                             if (detalles[gid] && detalles[gid].info && detalles[gid].info.thumb) {
@@ -824,28 +861,28 @@ if (listaWishlist) {
                             }
                         }
                     })
-                    .catch(function(e) { console.error('Error fetching thumbs:', e); });
+                    .catch(function (e) { console.error('Error fetching thumbs:', e); });
             }
 
             // Botones de quitar wishlist
             var botonesQuitar = document.querySelectorAll('.btn-quitar-wishlist');
-            botonesQuitar.forEach(function(btn) {
-                btn.addEventListener('click', function() {
+            botonesQuitar.forEach(function (btn) {
+                btn.addEventListener('click', function () {
                     var gameId = this.getAttribute('data-id');
                     fetch('php/wishlist/quitar_wishlist.php', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                         body: 'game_id=' + gameId
                     })
-                    .then(function(r) { return r.json(); })
-                    .then(function(resultado) {
-                        if (resultado.ok) {
-                            showToast('Juego quitado de la wishlist', 'success');
-                            setTimeout(() => location.reload(), 1500);
-                        } else {
-                            showToast(resultado.mensaje, 'error');
-                        }
-                    });
+                        .then(function (r) { return r.json(); })
+                        .then(function (resultado) {
+                            if (resultado.ok) {
+                                showToast('Juego quitado de la wishlist', 'success');
+                                setTimeout(() => location.reload(), 1500);
+                            } else {
+                                showToast(resultado.mensaje, 'error');
+                            }
+                        });
                 });
             });
         });
@@ -859,8 +896,8 @@ var listaHistorial = document.getElementById('lista-historial');
 
 if (listaHistorial) {
     fetch('php/historial/obtener_historial.php')
-        .then(function(r) { return r.json(); })
-        .then(function(busquedas) {
+        .then(function (r) { return r.json(); })
+        .then(function (busquedas) {
 
             if (busquedas.length == 0) {
                 document.getElementById('historial-vacio').hidden = false;
@@ -886,16 +923,16 @@ if (listaHistorial) {
 var btnLimpiarHistorial = document.getElementById('btn-limpiar-historial');
 
 if (btnLimpiarHistorial) {
-    btnLimpiarHistorial.addEventListener('click', function() {
+    btnLimpiarHistorial.addEventListener('click', function () {
         fetch('php/historial/obtener_historial.php', {
             method: 'POST',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             body: 'accion=limpiar'
         })
-        .then(function(r) { return r.json(); })
-        .then(function(resultado) {
-            if (resultado.ok) location.reload();
-        });
+            .then(function (r) { return r.json(); })
+            .then(function (resultado) {
+                if (resultado.ok) location.reload();
+            });
     });
 }
 
@@ -935,7 +972,7 @@ function showPriceAlertModal(tituloJuego, precioInicial = '', callbackConfirmar)
     document.body.appendChild(modalElement);
 
     // Activamos la clase después de un delay mínimo para la animación de fade-in
-    setTimeout(function() {
+    setTimeout(function () {
         modalElement.classList.add('activo');
     }, 10);
 
@@ -947,17 +984,17 @@ function showPriceAlertModal(tituloJuego, precioInicial = '', callbackConfirmar)
 
     function cerrarModal() {
         modalElement.classList.remove('activo');
-        setTimeout(function() {
+        setTimeout(function () {
             modalElement.remove();
         }, 300);
     }
 
     btnCancelar.addEventListener('click', cerrarModal);
-    modalElement.addEventListener('click', function(e) {
+    modalElement.addEventListener('click', function (e) {
         if (e.target === modalElement) cerrarModal();
     });
 
-    btnGuardar.addEventListener('click', function() {
+    btnGuardar.addEventListener('click', function () {
         var valor = input.value.trim();
         if (valor === '' || parseFloat(valor) <= 0) {
             showToast('Ingresá un precio válido mayor a 0', 'error');
@@ -967,7 +1004,7 @@ function showPriceAlertModal(tituloJuego, precioInicial = '', callbackConfirmar)
     });
 
     // Cerrar con Escape, Enviar con Enter
-    input.addEventListener('keydown', function(e) {
+    input.addEventListener('keydown', function (e) {
         if (e.key === 'Enter') {
             btnGuardar.click();
         } else if (e.key === 'Escape') {
@@ -983,7 +1020,7 @@ function showPriceAlertModal(tituloJuego, precioInicial = '', callbackConfirmar)
 var botonAlerta = document.getElementById('btn-alerta');
 
 if (botonAlerta) {
-    botonAlerta.addEventListener('click', function() {
+    botonAlerta.addEventListener('click', function () {
         if (!juegoActual) {
             showToast('Primero buscá un juego', 'error');
             return;
@@ -993,33 +1030,33 @@ if (botonAlerta) {
         var logoutBtn = document.querySelector('a[href*="logout.php"]');
         if (!logoutBtn) {
             showToast('Tenés que iniciar sesión para crear alertas', 'error');
-            setTimeout(function() {
+            setTimeout(function () {
                 window.location.href = 'auth.php';
             }, 1500);
             return;
         }
 
-        showPriceAlertModal(juegoActual.external, '', function(precioObjetivo, cerrarModal) {
+        showPriceAlertModal(juegoActual.external, '', function (precioObjetivo, cerrarModal) {
             fetch('php/alertas/crear_alerta.php', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                 body: 'game_id=' + encodeURIComponent(juegoActual.gameID) +
-                      '&game_nombre=' + encodeURIComponent(juegoActual.external) +
-                      '&precio_objetivo=' + encodeURIComponent(precioObjetivo)
+                    '&game_nombre=' + encodeURIComponent(juegoActual.external) +
+                    '&precio_objetivo=' + encodeURIComponent(precioObjetivo)
             })
-            .then(function(r) { return r.json(); })
-            .then(function(resultado) {
-                if (resultado.ok) {
-                    showToast(resultado.mensaje, 'success');
-                    cerrarModal();
-                } else {
-                    showToast(resultado.mensaje, 'error');
-                }
-            })
-            .catch(function(err) {
-                console.error('Error wishlist/alertas:', err);
-                showToast('Error al procesar la solicitud', 'error');
-            });
+                .then(function (r) { return r.json(); })
+                .then(function (resultado) {
+                    if (resultado.ok) {
+                        showToast(resultado.mensaje, 'success');
+                        cerrarModal();
+                    } else {
+                        showToast(resultado.mensaje, 'error');
+                    }
+                })
+                .catch(function (err) {
+                    console.error('Error wishlist/alertas:', err);
+                    showToast('Error al procesar la solicitud', 'error');
+                });
         });
     });
 }
@@ -1033,8 +1070,8 @@ var listaAlertas = document.getElementById('lista-alertas');
 if (listaAlertas) {
     function cargarAlertas() {
         fetch('php/alertas/obtener_alertas.php')
-            .then(function(r) { return r.json(); })
-            .then(function(alertas) {
+            .then(function (r) { return r.json(); })
+            .then(function (alertas) {
                 var alertasVacias = document.getElementById('alertas-vacias');
 
                 if (alertas.length == 0) {
@@ -1049,29 +1086,29 @@ if (listaAlertas) {
                 listaAlertas.innerHTML = '<li>Cargando precios en tiempo real...</li>';
 
                 // Obtener todos los IDs de juegos para consultar CheapShark de una sola vez
-                var ids = alertas.map(function(a) { return a.game_id; }).join(',');
+                var ids = alertas.map(function (a) { return a.game_id; }).join(',');
                 var tiendasPermitidas = ['1', '7', '11', '14', '21', '25'];
 
                 fetch('https://www.cheapshark.com/api/1.0/games?ids=' + ids)
-                    .then(function(r) { return r.json(); })
-                    .then(function(detalles) {
+                    .then(function (r) { return r.json(); })
+                    .then(function (detalles) {
                         listaAlertas.innerHTML = '';
 
                         for (var i = 0; i < alertas.length; i++) {
                             var alerta = alertas[i];
                             var gid = alerta.game_id;
-                            
+
                             // Obtener precio actual de la API
                             var precioActualStr = 'N/D';
                             var precioActualVal = null;
-                            
+
                             if (detalles && detalles[gid] && detalles[gid].deals) {
-                                var deals = detalles[gid].deals.filter(function(d) {
+                                var deals = detalles[gid].deals.filter(function (d) {
                                     return tiendasPermitidas.includes(d.storeID);
                                 });
-                                
+
                                 if (deals.length > 0) {
-                                    deals.sort(function(a, b) {
+                                    deals.sort(function (a, b) {
                                         return parseFloat(a.price) - parseFloat(b.price);
                                     });
                                     precioActualVal = parseFloat(deals[0].price);
@@ -1090,7 +1127,7 @@ if (listaAlertas) {
 
                             var li = document.createElement('li');
                             li.className = 'alerta-card';
-                            
+
                             // Generamos el markup de la tarjeta de alerta
                             li.innerHTML = `
                                 <div class="alerta-info">
@@ -1113,41 +1150,41 @@ if (listaAlertas) {
 
                         // Evento Editar Alerta
                         var botonesEditar = document.querySelectorAll('.btn-editar-alerta');
-                        botonesEditar.forEach(function(btn) {
-                            btn.addEventListener('click', function() {
+                        botonesEditar.forEach(function (btn) {
+                            btn.addEventListener('click', function () {
                                 var gameId = this.getAttribute('data-id');
                                 var gameNombre = this.getAttribute('data-nombre');
                                 var precioActualObj = this.getAttribute('data-precio');
 
-                                showPriceAlertModal(gameNombre, precioActualObj, function(nuevoPrecio, cerrarModal) {
+                                showPriceAlertModal(gameNombre, precioActualObj, function (nuevoPrecio, cerrarModal) {
                                     fetch('php/alertas/editar_alerta.php', {
                                         method: 'POST',
                                         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                                         body: 'game_id=' + encodeURIComponent(gameId) +
-                                              '&precio_objetivo=' + encodeURIComponent(nuevoPrecio)
+                                            '&precio_objetivo=' + encodeURIComponent(nuevoPrecio)
                                     })
-                                    .then(function(r) { return r.json(); })
-                                    .then(function(resultado) {
-                                        if (resultado.ok) {
-                                            showToast(resultado.mensaje, 'success');
-                                            cerrarModal();
-                                            cargarAlertas(); // Recargar la lista de alertas
-                                        } else {
-                                            showToast(resultado.mensaje, 'error');
-                                        }
-                                    })
-                                    .catch(function(err) {
-                                        console.error('Error al editar alerta:', err);
-                                        showToast('Error al editar la alerta', 'error');
-                                    });
+                                        .then(function (r) { return r.json(); })
+                                        .then(function (resultado) {
+                                            if (resultado.ok) {
+                                                showToast(resultado.mensaje, 'success');
+                                                cerrarModal();
+                                                cargarAlertas(); // Recargar la lista de alertas
+                                            } else {
+                                                showToast(resultado.mensaje, 'error');
+                                            }
+                                        })
+                                        .catch(function (err) {
+                                            console.error('Error al editar alerta:', err);
+                                            showToast('Error al editar la alerta', 'error');
+                                        });
                                 });
                             });
                         });
 
                         // Evento Eliminar Alerta
                         var botonesEliminar = document.querySelectorAll('.btn-eliminar-alerta');
-                        botonesEliminar.forEach(function(btn) {
-                            btn.addEventListener('click', function() {
+                        botonesEliminar.forEach(function (btn) {
+                            btn.addEventListener('click', function () {
                                 var gameId = this.getAttribute('data-id');
                                 if (confirm('¿Estás seguro de que querés eliminar esta alerta de precio?')) {
                                     fetch('php/alertas/eliminar_alerta.php', {
@@ -1155,32 +1192,356 @@ if (listaAlertas) {
                                         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                                         body: 'game_id=' + encodeURIComponent(gameId)
                                     })
-                                    .then(function(r) { return r.json(); })
-                                    .then(function(resultado) {
-                                        if (resultado.ok) {
-                                            showToast(resultado.mensaje, 'success');
-                                            cargarAlertas(); // Recargar la lista de alertas
-                                        } else {
-                                            showToast(resultado.mensaje, 'error');
-                                        }
-                                    })
-                                    .catch(function(err) {
-                                        console.error('Error al eliminar alerta:', err);
-                                        showToast('Error al eliminar la alerta', 'error');
-                                    });
+                                        .then(function (r) { return r.json(); })
+                                        .then(function (resultado) {
+                                            if (resultado.ok) {
+                                                showToast(resultado.mensaje, 'success');
+                                                cargarAlertas(); // Recargar la lista de alertas
+                                            } else {
+                                                showToast(resultado.mensaje, 'error');
+                                            }
+                                        })
+                                        .catch(function (err) {
+                                            console.error('Error al eliminar alerta:', err);
+                                            showToast('Error al eliminar la alerta', 'error');
+                                        });
                                 }
                             });
                         });
                     })
-                    .catch(function(err) {
+                    .catch(function (err) {
                         console.error('Error al consultar precios en CheapShark:', err);
                         listaAlertas.innerHTML = '<li>Error al cargar precios actualizados.</li>';
                     });
             })
-            .catch(function(err) {
+            .catch(function (err) {
                 console.error('Error al obtener alertas:', err);
             });
     }
 
     cargarAlertas();
+}
+
+// ================================================
+// WISHLIST PRIVACY CONTROL
+// ================================================
+var selectPrivacidad = document.getElementById('privacidad-wishlist');
+if (selectPrivacidad) {
+    selectPrivacidad.addEventListener('change', function () {
+        var valor = this.value;
+        fetch('php/usuarios/actualizar_privacidad.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: 'wishlist_publica=' + encodeURIComponent(valor)
+        })
+        .then(function (r) { return r.json(); })
+        .then(function (res) {
+            if (res.ok) {
+                showToast(res.mensaje, 'success');
+            } else {
+                showToast(res.mensaje, 'error');
+            }
+        })
+        .catch(function (e) {
+            console.error('Error al actualizar privacidad:', e);
+            showToast('Error al actualizar la privacidad', 'error');
+        });
+    });
+}
+
+// ================================================
+// AMIGOS Y SOCIAL LOGIC
+// ================================================
+var formAgregarAmigo = document.getElementById('form-agregar-amigo');
+if (formAgregarAmigo) {
+    formAgregarAmigo.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var input = document.getElementById('input-amigo-busqueda');
+        var valor = input.value.trim();
+        if (valor === '') return;
+
+        fetch('php/amigos/gestionar_amigos.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: 'accion=enviar&amigo_busqueda=' + encodeURIComponent(valor)
+        })
+        .then(function (r) { return r.json(); })
+        .then(function (res) {
+            if (res.ok) {
+                showToast(res.mensaje, 'success');
+                input.value = '';
+                cargarSeccionAmigos();
+            } else {
+                showToast(res.mensaje, 'error');
+            }
+        })
+        .catch(function (err) {
+            console.error('Error al enviar solicitud de amigo:', err);
+            showToast('Error al enviar solicitud', 'error');
+        });
+    });
+}
+
+function cargarSeccionAmigos() {
+    var listaAmigos = document.getElementById('lista-amigos');
+    var amigosVacio = document.getElementById('amigos-vacio');
+    
+    var contenedorSolicitudes = document.getElementById('contenedor-solicitudes');
+    var listaRecibidas = document.getElementById('lista-solicitudes-recibidas');
+    var listaEnviadas = document.getElementById('lista-solicitudes-enviadas');
+    
+    if (!listaAmigos) return;
+
+    fetch('php/amigos/obtener_amigos.php')
+    .then(function (r) { return r.json(); })
+    .then(function (res) {
+        if (!res.ok) {
+            console.error('Error cargando amigos:', res.mensaje);
+            return;
+        }
+
+        // Renderizar Solicitudes Pendientes
+        listaRecibidas.innerHTML = '';
+        listaEnviadas.innerHTML = '';
+        
+        var tieneSolicitudes = false;
+
+        if (res.recibidas && res.recibidas.length > 0) {
+            tieneSolicitudes = true;
+            res.recibidas.forEach(function (sol) {
+                var li = document.createElement('li');
+                li.className = 'solicitud-card';
+                li.innerHTML = `
+                    <div class="solicitud-usuario">
+                        <img class="solicitud-avatar" src="assets/img/perfiles/${sol.usuario_foto || 'default.jpg'}" alt="${sol.usuario_nombre}" onerror="this.src='assets/img/perfiles/default.jpg'">
+                        <span class="solicitud-nombre">${sol.usuario_nombre} <span class="muted">#${sol.usuario_id}</span></span>
+                    </div>
+                    <div class="solicitud-acciones">
+                        <button type="button" class="btn-aceptar-amigo" data-rel-id="${sol.relacion_id}">Aceptar</button>
+                        <button type="button" class="btn-rechazar-amigo" data-rel-id="${sol.relacion_id}">Rechazar</button>
+                    </div>
+                `;
+                listaRecibidas.appendChild(li);
+            });
+        } else {
+            listaRecibidas.innerHTML = '<li class="muted" style="font-size: 14px;">No tenés solicitudes recibidas</li>';
+        }
+
+        if (res.enviadas && res.enviadas.length > 0) {
+            tieneSolicitudes = true;
+            res.enviadas.forEach(function (sol) {
+                var li = document.createElement('li');
+                li.className = 'solicitud-card';
+                li.innerHTML = `
+                    <div class="solicitud-usuario">
+                        <img class="solicitud-avatar" src="assets/img/perfiles/${sol.amigo_foto || 'default.jpg'}" alt="${sol.amigo_nombre}" onerror="this.src='assets/img/perfiles/default.jpg'">
+                        <span class="solicitud-nombre">${sol.amigo_nombre} <span class="muted">#${sol.amigo_id}</span></span>
+                    </div>
+                    <div class="solicitud-acciones">
+                        <button type="button" class="btn-cancelar-solicitud" data-rel-id="${sol.relacion_id}">Cancelar</button>
+                    </div>
+                `;
+                listaEnviadas.appendChild(li);
+            });
+        } else {
+            listaEnviadas.innerHTML = '<li class="muted" style="font-size: 14px;">No tenés solicitudes enviadas</li>';
+        }
+
+        if (tieneSolicitudes) {
+            contenedorSolicitudes.hidden = false;
+        } else {
+            contenedorSolicitudes.hidden = true;
+        }
+
+        // Renderizar Amigos Aceptados
+        listaAmigos.innerHTML = '';
+        if (res.amigos && res.amigos.length > 0) {
+            amigosVacio.hidden = true;
+            listaAmigos.hidden = false;
+            
+            res.amigos.forEach(function (amg) {
+                var esPublica = parseInt(amg.wishlist_publica) === 1;
+                var badgeTexto = esPublica ? 'Wishlist Pública' : 'Wishlist Privada';
+                var badgeClass = esPublica ? 'publica' : 'privada';
+                
+                var li = document.createElement('li');
+                li.className = 'amigo-card';
+                li.innerHTML = `
+                    <div class="amigo-info">
+                        <img class="amigo-avatar" src="assets/img/perfiles/${amg.amigo_foto || 'default.jpg'}" alt="${amg.amigo_nombre}" onerror="this.src='assets/img/perfiles/default.jpg'">
+                        <div class="amigo-detalles">
+                            <span class="amigo-nombre">${amg.amigo_nombre}</span>
+                            <span class="amigo-id">ID: #${amg.amigo_id}</span>
+                            <span class="amigo-status-badge ${badgeClass}">${badgeTexto}</span>
+                        </div>
+                    </div>
+                    <div class="amigo-acciones">
+                        <button type="button" class="btn-ver-wishlist" data-amigo-id="${amg.amigo_id}" ${esPublica ? '' : 'disabled'}>
+                            ${esPublica ? 'Ver Wishlist' : 'Privada'}
+                        </button>
+                        <button type="button" class="btn-eliminar-amigo-icon" data-amigo-user-id="${amg.amigo_id}" title="Eliminar amigo">
+                            ✕
+                        </button>
+                    </div>
+                `;
+                listaAmigos.appendChild(li);
+            });
+        } else {
+            amigosVacio.hidden = false;
+            listaAmigos.hidden = true;
+        }
+
+        // Agregar Event Listeners a los botones de Solicitudes
+        document.querySelectorAll('.btn-aceptar-amigo').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                var relId = this.getAttribute('data-rel-id');
+                gestionarAmistad('aceptar', relId, 0);
+            });
+        });
+
+        document.querySelectorAll('.btn-rechazar-amigo, .btn-cancelar-solicitud').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                var relId = this.getAttribute('data-rel-id');
+                if (confirm('¿Querés cancelar/rechazar esta solicitud?')) {
+                    gestionarAmistad('rechazar', relId, 0);
+                }
+            });
+        });
+
+        document.querySelectorAll('.btn-eliminar-amigo-icon').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                var amigoUserId = this.getAttribute('data-amigo-user-id');
+                if (confirm('¿Estás seguro de que querés eliminar a este amigo?')) {
+                    gestionarAmistad('eliminar', 0, amigoUserId);
+                }
+            });
+        });
+
+        // Event listener para ver wishlist
+        document.querySelectorAll('.btn-ver-wishlist').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                var amigoId = this.getAttribute('data-amigo-id');
+                verWishlistAmigo(amigoId);
+            });
+        });
+    })
+    .catch(function (err) {
+        console.error('Error al obtener amigos:', err);
+    });
+}
+
+function gestionarAmistad(accion, relacionId, amigoUserId) {
+    var bodyParams = 'accion=' + encodeURIComponent(accion);
+    if (relacionId > 0) {
+        bodyParams += '&solicitud_id=' + encodeURIComponent(relacionId);
+    }
+    if (amigoUserId > 0) {
+        bodyParams += '&amigo_user_id=' + encodeURIComponent(amigoUserId);
+    }
+
+    fetch('php/amigos/gestionar_amigos.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: bodyParams
+    })
+    .then(function (r) { return r.json(); })
+    .then(function (res) {
+        if (res.ok) {
+            showToast(res.mensaje, 'success');
+            cargarSeccionAmigos();
+        } else {
+            showToast(res.mensaje, 'error');
+        }
+    })
+    .catch(function (err) {
+        console.error('Error al gestionar amistad:', err);
+        showToast('Error al procesar la solicitud', 'error');
+    });
+}
+
+// ================================================
+// VER WISHLIST DE AMIGO (MODAL)
+// ================================================
+function verWishlistAmigo(amigoId) {
+    var modal = document.getElementById('modal-wishlist-amigo');
+    var modalTitulo = document.getElementById('modal-wishlist-titulo');
+    var modalLista = document.getElementById('modal-lista-wishlist-amigo');
+    var modalVacia = document.getElementById('modal-wishlist-amigo-vacia');
+
+    if (!modal) return;
+
+    modalLista.innerHTML = '<li>Cargando juegos de tu amigo...</li>';
+    modalVacia.hidden = true;
+    modal.classList.add('activo');
+
+    fetch('php/amigos/obtener_wishlist_amigo.php?amigo_id=' + amigoId)
+    .then(function (r) { return r.json(); })
+    .then(function (res) {
+        if (!res.ok) {
+            showToast(res.mensaje, 'error');
+            modal.classList.remove('activo');
+            return;
+        }
+
+        modalTitulo.textContent = 'Wishlist de ' + res.amigo_nombre;
+        modalLista.innerHTML = '';
+
+        var juegos = res.wishlist || [];
+        if (juegos.length === 0) {
+            modalVacia.hidden = false;
+            return;
+        }
+
+        juegos.forEach(function (j) {
+            var li = document.createElement('li');
+            li.className = 'juego-card';
+            li.innerHTML = `
+                <img id="friend-wishlist-img-${j.game_id}" src="assets/img/placeholder.jpg" alt="${j.game_nombre}" />
+                <div class="juego-info">
+                    <h3><a href="juego.php?id=${j.game_id}">${j.game_nombre}</a></h3>
+                    <p class="fecha-agregado">Agregado el ${new Date(j.fecha_agregado).toLocaleDateString('es-AR')}</p>
+                </div>
+                <div class="juego-acciones" style="margin-left: auto;">
+                    <a href="juego.php?id=${j.game_id}" style="background-color: var(--verde-medio); color: white; padding: 6px 12px; border-radius: 4px; font-weight: 600; text-decoration: none;">Ver Precios</a>
+                </div>
+            `;
+            modalLista.appendChild(li);
+        });
+
+        // Cargar portadas desde CheapShark
+        var ids = juegos.map(function (j) { return j.game_id; }).join(',');
+        if (ids !== '') {
+            fetch('https://www.cheapshark.com/api/1.0/games?ids=' + ids)
+            .then(function (r) { return r.json(); })
+            .then(function (detalles) {
+                juegos.forEach(function (j) {
+                    var gid = j.game_id;
+                    if (detalles[gid] && detalles[gid].info && detalles[gid].info.thumb) {
+                        var img = document.getElementById('friend-wishlist-img-' + gid);
+                        if (img) img.src = detalles[gid].info.thumb;
+                    }
+                });
+            })
+            .catch(function (e) { console.error('Error fetching friend wishlist thumbs:', e); });
+        }
+    })
+    .catch(function (err) {
+        console.error('Error al ver wishlist del amigo:', err);
+        showToast('Error al cargar la wishlist', 'error');
+        modal.classList.remove('activo');
+    });
+}
+
+// Lógica para cerrar el modal de amigo
+var btnCerrarWishlistModal = document.getElementById('btn-cerrar-wishlist-modal');
+var modalWishlistAmigo = document.getElementById('modal-wishlist-amigo');
+if (btnCerrarWishlistModal && modalWishlistAmigo) {
+    btnCerrarWishlistModal.addEventListener('click', function () {
+        modalWishlistAmigo.classList.remove('activo');
+    });
+    modalWishlistAmigo.addEventListener('click', function (e) {
+        if (e.target === modalWishlistAmigo) {
+            modalWishlistAmigo.classList.remove('activo');
+        }
+    });
 }

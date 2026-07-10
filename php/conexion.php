@@ -1,8 +1,8 @@
 <?php
-$host     = "sql208.infinityfree.com";   
-$usuario  = "if0_42338178";        
-$password = "mebdejdmVfbVr";            
-$base     = "if0_42338178_gamervault";  
+$host     = "localhost";   
+$usuario  = "root";        
+$password = "";            
+$base     = "gamervault";  
 
 $conexion = new mysqli($host, $usuario, $password, $base);
 

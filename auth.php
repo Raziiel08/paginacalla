@@ -81,14 +81,19 @@ switch ($errorRegistro) {
 
         <div class="campo">
           <label for="login-password">Contraseña</label>
-          <input
-            type="password"
-            id="login-password"
-            name="password"
-            placeholder="Tu contraseña"
-            required
-            autocomplete="current-password"
-          />
+          <div class="password-wrapper">
+            <input
+              type="password"
+              id="login-password"
+              name="password"
+              placeholder="Tu contraseña"
+              required
+              autocomplete="current-password"
+            />
+            <button type="button" class="password-toggle" data-target="login-password" aria-label="Mostrar contraseña" aria-pressed="false">
+              <img src="assets/img/vista.png" alt="Mostrar contraseña" />
+            </button>
+          </div>
         </div>
 
         <!-- Mensaje de error (se muestra desde PHP si las credenciales fallan) -->
@@ -147,28 +152,38 @@ switch ($errorRegistro) {
 
         <div class="campo">
           <label for="registro-password">Contraseña</label>
-          <input
-            type="password"
-            id="registro-password"
-            name="password"
-            placeholder="Mínimo 8 caracteres"
-            required
-            minlength="8"
-            autocomplete="new-password"
-          />
+          <div class="password-wrapper">
+            <input
+              type="password"
+              id="registro-password"
+              name="password"
+              placeholder="Mínimo 8 caracteres"
+              required
+              minlength="8"
+              autocomplete="new-password"
+            />
+            <button type="button" class="password-toggle" data-target="registro-password" aria-label="Mostrar contraseña" aria-pressed="false">
+              <img src="assets/img/vista.png" alt="Mostrar contraseña" />
+            </button>
+          </div>
         </div>
 
         <div class="campo">
           <label for="registro-password-confirmar">Confirmar contraseña</label>
-          <input
-            type="password"
-            id="registro-password-confirmar"
-            name="password_confirmar"
-            placeholder="Repetí tu contraseña"
-            required
-            minlength="8"
-            autocomplete="new-password"
-          />
+          <div class="password-wrapper">
+            <input
+              type="password"
+              id="registro-password-confirmar"
+              name="password_confirmar"
+              placeholder="Repetí tu contraseña"
+              required
+              minlength="8"
+              autocomplete="new-password"
+            />
+            <button type="button" class="password-toggle" data-target="registro-password-confirmar" aria-label="Mostrar contraseña" aria-pressed="false">
+              <img src="assets/img/vista.png" alt="Mostrar contraseña" />
+            </button>
+          </div>
         </div>
 
         <!-- Mensajes de error -->

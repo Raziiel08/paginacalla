@@ -83,7 +83,8 @@ CREATE TABLE `usuarios` (
   `contrasena` varchar(255) NOT NULL,
   `fecha_registro` datetime DEFAULT current_timestamp(),
   `rol` enum('usuario','admin') DEFAULT 'usuario',
-  `foto` varchar(255) DEFAULT 'default.jpg'
+  `foto` varchar(255) DEFAULT 'default.jpg',
+  `wishlist_publica` tinyint(1) DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -206,6 +207,23 @@ ALTER TABLE `historial_busquedas`
 --
 ALTER TABLE `wishlist`
   ADD CONSTRAINT `wishlist_ibfk_1` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE;
+
+--
+-- Estructura de tabla para la tabla `amigos`
+--
+CREATE TABLE `amigos` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `usuario_id` int(11) NOT NULL,
+  `amigo_id` int(11) NOT NULL,
+  `estado` enum('pendiente','aceptado') DEFAULT 'pendiente',
+  `fecha_creacion` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `usuario_amigo` (`usuario_id`,`amigo_id`),
+  KEY `amigo_id` (`amigo_id`),
+  CONSTRAINT `fk_amigos_usuario` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_amigos_amigo` FOREIGN KEY (`amigo_id`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
